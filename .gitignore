@@ -1,0 +1,42 @@
+# Secrets e dados sensíveis (NUNCA commitar secrets em plain text!)
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+*secret*.yaml
+*secret*.yml
+!sealed-secret*.yaml
+!sealed-secret*.yml
+
+# Arquivos temporários
+*.tmp
+*.bak
+*.swp
+*~
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Terraform (caso acidentalmente tenha arquivo aqui)
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Helm
+charts/
+*.tgz
+
+# Kubernetes
+kubeconfig
+*.kubeconfig
+
+# Logs
+*.log
+
+# ArgoCD downloaded manifest (baixar manualmente quando necessário)
+argocd/install/install.yaml

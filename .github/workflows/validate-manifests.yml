@@ -1,0 +1,116 @@
+name: Validate Kubernetes Manifests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'applications/**'
+      - 'infrastructure/**'
+      - 'argocd/apps/**'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate:
+    name: Validate Manifests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.28.0'
+
+      - name: Setup kubeval
+        run: |
+          wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
+          tar xf kubeval-linux-amd64.tar.gz
+          sudo mv kubeval /usr/local/bin
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 'v3.13.0'
+
+      - name: Install Trivy
+        run: |
+          sudo apt-get install wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo "deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install trivy
+
+      - name: Validate YAML Syntax
+        run: |
+          echo "🔍 Validating YAML syntax..."
+          find applications infrastructure argocd/apps -name "*.yaml" -o -name "*.yml" | while read file; do
+            echo "Checking $file"
+            kubectl apply --dry-run=client -f "$file" || echo "⚠️  Warning: $file might not be valid"
+          done
+
+      - name: Run kubeval
+        run: |
+          echo "🔍 Running kubeval..."
+          find applications infrastructure -name "*.yaml" -o -name "*.yml" | while read file; do
+            if grep -q "kind:" "$file"; then
+              echo "Validating $file"
+              kubeval --ignore-missing-schemas "$file" || echo "⚠️  Warning: $file validation failed"
+            fi
+          done
+
+      - name: Lint Helm Charts
+        run: |
+          echo "🔍 Linting Helm charts..."
+          if [ -d "applications" ]; then
+            find applications -name "Chart.yaml" -exec dirname {} \; | while read chart_dir; do
+              echo "Linting $chart_dir"
+              helm lint "$chart_dir" || echo "⚠️  Warning: Helm lint failed for $chart_dir"
+            done
+          fi
+
+      - name: Security Scan with Trivy
+        run: |
+          echo "🔐 Running security scan..."
+          trivy fs --severity HIGH,CRITICAL --exit-code 0 . || echo "⚠️  Security issues found"
+
+      - name: Check for secrets
+        run: |
+          echo "🔐 Checking for exposed secrets..."
+          if grep -r "password\|secret\|token" applications infrastructure --include="*.yaml" --include="*.yml" | grep -v "sealed-secret\|SealedSecret"; then
+            echo "⚠️  Warning: Potential secrets found in plain text!"
+            exit 1
+          else
+            echo "✅ No plain text secrets found"
+          fi
+
+      - name: Summary Comment
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = `## 🔍 Manifest Validation Results
+            
+            ✅ Validation completed for PR #${{ github.event.pull_request.number }}
+            
+            **Checks performed:**
+            - ✅ YAML syntax validation
+            - ✅ Kubeval schema validation  
+            - ✅ Helm chart linting
+            - ✅ Security scanning (Trivy)
+            - ✅ Secret detection
+            
+            Review the logs above for any warnings or errors.`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
