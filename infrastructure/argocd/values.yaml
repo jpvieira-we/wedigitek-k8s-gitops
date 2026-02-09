@@ -1,0 +1,224 @@
+# ArgoCD Helm Chart Values
+# Bootstrap installation configuration
+# Versão do Chart: 7.7.12
+
+global:
+  domain: argocd.wedigitek.com
+
+configs:
+  params:
+    # Desabilitar TLS interno (Ingress Controller fará o TLS)
+    server.insecure: true
+    server.repo.server.timeout.seconds: "120"
+  
+  cm:
+    # URL externa do ArgoCD
+    url: https://argocd.wedigitek.com
+    
+    # Timeout para operations
+    timeout.reconciliation: 180s
+    
+    # Repositórios Git conhecidos
+    repositories: |
+      - url: https://github.com/wedigitek/wedigitek-k8s-gitops.git
+        name: wedigitek-gitops
+        type: git
+    
+    # Resource health checks customizados
+    resource.customizations: |
+      argoproj.io/Application:
+        health.lua: |
+          hs = {}
+          hs.status = "Progressing"
+          hs.message = ""
+          if obj.status ~= nil then
+            if obj.status.health ~= nil then
+              hs.status = obj.status.health.status
+              if obj.status.health.message ~= nil then
+                hs.message = obj.status.health.message
+              end
+            end
+          end
+          return hs
+  
+  # RBAC Configuration
+  rbac:
+    # Default role para usuários não autenticados
+    policy.default: role:readonly
+    
+    # Políticas RBAC
+    policy.csv: |
+      # Admin role - acesso total
+      p, role:admin, applications, *, */*, allow
+      p, role:admin, clusters, *, *, allow
+      p, role:admin, repositories, *, *, allow
+      p, role:admin, projects, *, *, allow
+      p, role:admin, accounts, *, *, allow
+      p, role:admin, certificates, *, *, allow
+      p, role:admin, gpgkeys, *, *, allow
+      p, role:admin, logs, *, *, allow
+      p, role:admin, exec, *, *, allow
+      
+      # Developer role - pode visualizar e fazer sync
+      p, role:developer, applications, get, */*, allow
+      p, role:developer, applications, sync, */*, allow
+      p, role:developer, applications, override, */*, allow
+      p, role:developer, repositories, get, *, allow
+      p, role:developer, projects, get, *, allow
+      p, role:developer, logs, get, */*, allow
+      
+      # Viewer role - somente leitura
+      p, role:viewer, applications, get, */*, allow
+      p, role:viewer, projects, get, *, allow
+      p, role:viewer, repositories, get, *, allow
+      
+      # Grant admin role to admin group
+      g, admin, role:admin
+
+# ArgoCD Server
+server:
+  replicas: 2
+  
+  # Resources
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  
+  # Metrics
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  
+  # Ingress para acesso externo
+  ingress:
+    enabled: false  # Será habilitado depois via self-management
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    hosts:
+      - argocd.wedigitek.com
+    tls:
+      - secretName: argocd-tls
+        hosts:
+          - argocd.wedigitek.com
+  
+  # Service
+  service:
+    type: ClusterIP
+
+# Repository Server
+repoServer:
+  replicas: 2
+  
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+
+# Application Controller
+controller:
+  replicas: 1
+  
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+  
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+
+# Redis
+redis:
+  enabled: true
+  
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+# ApplicationSet Controller
+applicationSet:
+  enabled: true
+  replicas: 2
+  
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+# Notifications Controller
+notifications:
+  enabled: true
+  
+  argocdUrl: https://argocd.wedigitek.com
+  
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  
+  # Slack notifications (descomentar e configurar depois)
+  # notifiers:
+  #   service.slack: |
+  #     token: $slack-token
+  
+  # Templates de notificações
+  # templates:
+  #   template.app-deployed: |
+  #     message: |
+  #       Application {{.app.metadata.name}} is now running new version.
+  #     slack:
+  #       attachments: |
+  #         [{
+  #           "title": "{{ .app.metadata.name}}",
+  #           "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+  #           "color": "#18be52",
+  #           "fields": [
+  #           {
+  #             "title": "Sync Status",
+  #             "value": "{{.app.status.sync.status}}",
+  #             "short": true
+  #           }]
+  #         }]
+
+# Dex (SSO/OAuth) - Desabilitado por padrão
+dex:
+  enabled: false
+
+# Global configuration
+global:
+  # Domain
+  domain: argocd.wedigitek.com
+  
+  # Image pull policy
+  imagePullPolicy: IfNotPresent
