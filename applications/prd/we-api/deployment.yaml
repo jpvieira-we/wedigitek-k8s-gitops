@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: we-api
+  namespace: we-api-prd
+  labels:
+    app: we-api
+    version: v3.22.4
+spec:
+  replicas: 3  # Alta disponibilidade
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1        # Permite 1 pod extra durante update
+      maxUnavailable: 0  # ZERO downtime - nunca deixa pods indisponíveis
+  selector:
+    matchLabels:
+      app: we-api
+  template:
+    metadata:
+      labels:
+        app: we-api
+        version: v3.22.4
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3000"
+        prometheus.io/path: "/metrics"
+    spec:
+      # Anti-affinity: garante pods em nodes diferentes
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - we-api
+              topologyKey: kubernetes.io/hostname
+      
+      containers:
+      - name: we-api
+        image: acrwedigitekprd.azurecr.io/we-api:latest  # Será atualizado via CI/CD
+        imagePullPolicy: Always
+        
+        ports:
+        - name: http
+          containerPort: 3000
+          protocol: TCP
+        
+        envFrom:
+        - configMapRef:
+            name: we-api-config
+        # - secretRef:
+        #     name: we-api-secrets  # TODO: Criar sealed-secret
+        
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        
+        # Liveness probe: verifica se pod está vivo
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        # Readiness probe: verifica se pod está pronto para receber tráfego
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          successThreshold: 1
+          failureThreshold: 3
+        
+        # Graceful shutdown
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 15"]
+      
+      # Graceful termination
+      terminationGracePeriodSeconds: 30
