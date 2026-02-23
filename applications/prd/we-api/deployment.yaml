@@ -53,8 +53,8 @@ spec:
         envFrom:
         - configMapRef:
             name: we-api-config
-        # - secretRef:
-        #     name: we-api-secrets  # TODO: Criar sealed-secret
+        - secretRef:
+            name: we-api-secrets
         
         resources:
           requests:

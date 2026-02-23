@@ -8,13 +8,14 @@ data:
   NODE_PATH: "."
   WE_API_PORT: "3000"
   
-  # MongoDB - ATUALIZAR com MongoDB Atlas após migração
-  # Por enquanto, apontar para cluster MongoDB atual
-  MONGODB_URI: "mongodb://mongo-cluster-001.internal:27017,mongo-cluster-002.internal:27017/wefood?replicaSet=rs0"
+  # MongoDB - Ambiente de TESTE (não conectado à produção ainda)
+  # TODO: Configurar MongoDB Atlas ou conexão com prod após validação
+  MONGODB_URI: "mongodb://localhost:27017/wefood-test"
   
-  # Redis
-  REDIS_HOST: "redis-master.redis.svc.cluster.local"
+  # Redis - Desabilitado por enquanto
+  REDIS_HOST: "localhost"
   REDIS_PORT: "6379"
+  REDIS_ENABLED: "false"
   
   # Logs
   WE_API_LOGGER_ENABLED: "true"
