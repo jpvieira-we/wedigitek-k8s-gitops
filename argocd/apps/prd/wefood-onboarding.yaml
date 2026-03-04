@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: we-api-prd
+  name: wefood-onboarding-prd
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,10 +10,10 @@ spec:
   source:
     repoURL: https://github.com/wedigitek/wedigitek-k8s-gitops.git
     targetRevision: main
-    path: applications/prd/we-api
+    path: applications/prd/wefood-onboarding
   destination:
     server: https://kubernetes.default.svc
-    namespace: we-api-prd
+    namespace: wefood-onboarding-prd
   syncPolicy:
     automated:
       prune: true

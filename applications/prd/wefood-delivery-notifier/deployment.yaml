@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: we-api
-  namespace: we-api-prd
+  name: wefood-delivery-notifier
+  namespace: wefood-delivery-notifier-prd
   labels:
-    app: we-api
+    app: wefood-delivery-notifier
 spec:
-  replicas: 3
+  replicas: 2
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -14,15 +14,15 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: we-api
+      app: wefood-delivery-notifier
   template:
     metadata:
       labels:
-        app: we-api
+        app: wefood-delivery-notifier
     spec:
       containers:
-      - name: we-api
-        image: acrwedigitekprd.azurecr.io/we-api:latest
+      - name: wefood-delivery-notifier
+        image: acrwedigitekprd.azurecr.io/wefood-delivery-notifier:latest
         imagePullPolicy: Always
         ports:
         - name: http

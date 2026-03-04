@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: we-api
-  namespace: we-api-prd
+  name: we-loyalty-service
+  namespace: we-loyalty-service-prd
   labels:
-    app: we-api
+    app: we-loyalty-service
 spec:
-  replicas: 3
+  replicas: 2
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -14,15 +14,15 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: we-api
+      app: we-loyalty-service
   template:
     metadata:
       labels:
-        app: we-api
+        app: we-loyalty-service
     spec:
       containers:
-      - name: we-api
-        image: acrwedigitekprd.azurecr.io/we-api:latest
+      - name: we-loyalty-service
+        image: acrwedigitekprd.azurecr.io/we-loyalty-service:latest
         imagePullPolicy: Always
         ports:
         - name: http

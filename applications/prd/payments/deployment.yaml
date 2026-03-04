@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: we-api
-  namespace: we-api-prd
+  name: payments
+  namespace: payments-prd
   labels:
-    app: we-api
+    app: payments
 spec:
-  replicas: 3
+  replicas: 2
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -14,15 +14,15 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: we-api
+      app: payments
   template:
     metadata:
       labels:
-        app: we-api
+        app: payments
     spec:
       containers:
-      - name: we-api
-        image: acrwedigitekprd.azurecr.io/we-api:latest
+      - name: payments
+        image: acrwedigitekprd.azurecr.io/payments:latest
         imagePullPolicy: Always
         ports:
         - name: http

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: we-api-prd
+  name: we-wallet-prd
   labels:
-    app: we-api
+    app: we-wallet
     environment: production

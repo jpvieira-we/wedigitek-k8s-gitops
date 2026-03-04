@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: we-api-prd
+  name: we-admin-prd
   labels:
-    app: we-api
+    app: we-admin
     environment: production

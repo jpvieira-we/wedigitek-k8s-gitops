@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: we-api
-  namespace: we-api-prd
+  name: we-admin
+  namespace: we-admin-prd
   labels:
-    app: we-api
+    app: we-admin
 spec:
   type: ClusterIP
   ports:
   - port: 80
-    targetPort: 3000
+    targetPort: 80
     protocol: TCP
     name: http
   selector:
-    app: we-api
+    app: we-admin

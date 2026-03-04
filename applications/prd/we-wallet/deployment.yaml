@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: we-api
-  namespace: we-api-prd
+  name: we-wallet
+  namespace: we-wallet-prd
   labels:
-    app: we-api
+    app: we-wallet
 spec:
-  replicas: 3
+  replicas: 2
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -14,19 +14,19 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: we-api
+      app: we-wallet
   template:
     metadata:
       labels:
-        app: we-api
+        app: we-wallet
     spec:
       containers:
-      - name: we-api
-        image: acrwedigitekprd.azurecr.io/we-api:latest
+      - name: we-wallet
+        image: acrwedigitekprd.azurecr.io/we-wallet:latest
         imagePullPolicy: Always
         ports:
         - name: http
-          containerPort: 3000
+          containerPort: 80
           protocol: TCP
         resources:
           requests:
@@ -38,12 +38,12 @@ spec:
         livenessProbe:
           httpGet:
             path: /health
-            port: 3000
+            port: 80
           initialDelaySeconds: 30
           periodSeconds: 10
         readinessProbe:
           httpGet:
             path: /health
-            port: 3000
+            port: 80
           initialDelaySeconds: 10
           periodSeconds: 5

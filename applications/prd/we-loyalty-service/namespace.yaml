@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: we-api-prd
+  name: we-loyalty-service-prd
   labels:
-    app: we-api
+    app: we-loyalty-service
     environment: production

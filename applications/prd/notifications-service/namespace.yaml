@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: we-api-prd
+  name: notifications-service-prd
   labels:
-    app: we-api
+    app: notifications-service
     environment: production

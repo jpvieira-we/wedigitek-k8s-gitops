@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: we-api-prd
+  name: wefood-delivery-notifier-prd
   labels:
-    app: we-api
+    app: wefood-delivery-notifier
     environment: production

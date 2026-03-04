@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: we-api-prd
+  name: prd-apps
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,20 +10,11 @@ spec:
   source:
     repoURL: https://github.com/wedigitek/wedigitek-k8s-gitops.git
     targetRevision: main
-    path: applications/prd/we-api
+    path: argocd/apps/prd
   destination:
     server: https://kubernetes.default.svc
-    namespace: we-api-prd
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-      allowEmpty: false
-    syncOptions:
-      - CreateNamespace=true
-    retry:
-      limit: 5
-      backoff:
-        duration: 5s
-        factor: 2
-        maxDuration: 3m
