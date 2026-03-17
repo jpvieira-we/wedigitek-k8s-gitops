@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: we-marketplace
+  namespace: wedigitek-prd
+  labels:
+    app: we-marketplace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: we-marketplace
+  template:
+    metadata:
+      labels:
+        app: we-marketplace
+    spec:
+      containers:
+      - name: we-marketplace
+        image: ghcr.io/wedigitek/web-marketplace:master
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "50m"
+          limits:
+            memory: "256Mi"
+            cpu: "100m"

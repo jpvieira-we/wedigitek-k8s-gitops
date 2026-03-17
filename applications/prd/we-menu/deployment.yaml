@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: we-menu
+  namespace: wedigitek-prd
+  labels:
+    app: we-menu
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: we-menu
+  template:
+    metadata:
+      labels:
+        app: we-menu
+    spec:
+      containers:
+      - name: we-menu
+        image: registry.gitlab.com/wedigitek1/we-food/we-menu:master
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"

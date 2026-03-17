@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: script-runner
+  namespace: wedigitek-prd
+  labels:
+    app: script-runner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: script-runner
+  template:
+    metadata:
+      labels:
+        app: script-runner
+    spec:
+      containers:
+      - name: script-runner
+        image: registry.gitlab.com/wedigitek1/we-food/script-runner:master
+        envFrom:
+        - secretRef:
+            name: script-runner-secrets
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "200m"

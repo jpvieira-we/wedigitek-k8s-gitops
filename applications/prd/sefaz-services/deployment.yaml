@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sefaz-services
+  namespace: wedigitek-prd
+  labels:
+    app: sefaz-services
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sefaz-services
+  template:
+    metadata:
+      labels:
+        app: sefaz-services
+    spec:
+      containers:
+      - name: sefaz-services
+        image: registry.gitlab.com/wedigitek1/we-food/services/sefaz-services:master
+        envFrom:
+        - secretRef:
+            name: sefaz-services-secrets
+        volumeMounts:
+        - name: sefaz-certificates
+          mountPath: /app/certificates
+          readOnly: true
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "300m"
+      volumes:
+      - name: sefaz-certificates
+        secret:
+          secretName: sefaz-certificates

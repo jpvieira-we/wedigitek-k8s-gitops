@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sefaz-services
+  namespace: wedigitek-prd
+spec:
+  selector:
+    app: sefaz-services
+  ports:
+  - port: 3000
+    targetPort: 3000
+  type: ClusterIP

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wefood-drive
+  namespace: wedigitek-prd
+  labels:
+    app: wefood-drive
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wefood-drive
+  template:
+    metadata:
+      labels:
+        app: wefood-drive
+    spec:
+      containers:
+      - name: wefood-drive
+        image: registry.gitlab.com/wedigitek1/we-food/wefood-drive:master
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
