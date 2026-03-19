@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: wedigitek-apps
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/jpvieira-we/wedigitek-k8s-gitops.git
+    targetRevision: main
+    path: applications/prd
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: wedigitek-prd
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
