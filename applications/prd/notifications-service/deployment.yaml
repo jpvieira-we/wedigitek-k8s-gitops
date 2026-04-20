@@ -20,10 +20,21 @@ spec:
       labels:
         app: notifications-service
     spec:
+      volumes:
+      - name: keyvault-env
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: notifications-service-keyvault-env
       containers:
       - name: notifications-service
         image: acrwedigitekprd.azurecr.io/notifications-service:latest
         imagePullPolicy: Always
+        volumeMounts:
+        - name: keyvault-env
+          mountPath: /mnt/keyvault-env
+          readOnly: true
         ports:
         - name: http
           containerPort: 3000

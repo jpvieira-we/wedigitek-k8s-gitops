@@ -20,10 +20,21 @@ spec:
       labels:
         app: reports
     spec:
+      volumes:
+      - name: keyvault-env
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: reports-keyvault-env
       containers:
       - name: reports
         image: acrwedigitekprd.azurecr.io/reports:latest
         imagePullPolicy: Always
+        volumeMounts:
+        - name: keyvault-env
+          mountPath: /mnt/keyvault-env
+          readOnly: true
         ports:
         - name: http
           containerPort: 3000

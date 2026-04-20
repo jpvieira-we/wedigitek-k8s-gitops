@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: we-api-integrations-service-prd
 
 resources:
+  - secretproviderclass-env.yaml
   - namespace.yaml
   - deployment.yaml
   - service.yaml

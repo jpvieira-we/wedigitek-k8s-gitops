@@ -4,6 +4,8 @@ kind: Kustomization
 namespace: billing-prd
 
 resources:
+  - secretproviderclass-files.yaml
+  - secretproviderclass-env.yaml
   - namespace.yaml
   - deployment.yaml
   - service.yaml

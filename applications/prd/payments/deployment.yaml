@@ -20,10 +20,21 @@ spec:
       labels:
         app: payments
     spec:
+      volumes:
+      - name: keyvault-env
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: payments-keyvault-env
       containers:
       - name: payments
         image: acrwedigitekprd.azurecr.io/payments:latest
         imagePullPolicy: Always
+        volumeMounts:
+        - name: keyvault-env
+          mountPath: /mnt/keyvault-env
+          readOnly: true
         ports:
         - name: http
           containerPort: 3000

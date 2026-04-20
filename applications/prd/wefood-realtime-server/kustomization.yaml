@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: wefood-realtime-server-prd
 
 resources:
+  - secretproviderclass-env.yaml
   - namespace.yaml
   - deployment.yaml
   - service.yaml

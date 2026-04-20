@@ -20,10 +20,30 @@ spec:
       labels:
         app: billing
     spec:
+      volumes:
+      - name: keyvault-env
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: billing-keyvault-env
+      - name: keyvault-files
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: billing-keyvault-files
       containers:
       - name: billing
         image: acrwedigitekprd.azurecr.io/billing:latest
         imagePullPolicy: Always
+        volumeMounts:
+        - name: keyvault-env
+          mountPath: /mnt/keyvault-env
+          readOnly: true
+        - name: keyvault-files
+          mountPath: /billing/certs
+          readOnly: true
         ports:
         - name: http
           containerPort: 3000
