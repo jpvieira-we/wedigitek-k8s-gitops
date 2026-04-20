@@ -33,6 +33,12 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: we-api-keyvault-env
+      - name: keyvault-files
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: we-api-keyvault-files
       containers:
       - name: we-api
         image: acrwedigitekprd.azurecr.io/we-api:latest
@@ -49,6 +55,9 @@ spec:
         volumeMounts:
         - name: keyvault-env
           mountPath: /mnt/keyvault-env
+          readOnly: true
+        - name: keyvault-files
+          mountPath: /we-api/certs
           readOnly: true
         resources:
           requests:
