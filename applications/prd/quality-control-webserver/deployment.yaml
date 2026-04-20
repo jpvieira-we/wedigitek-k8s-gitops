@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: quality-control-webserver
-        image: registry.gitlab.com/wedigitek1/quality-control-webserver:master
+        image: acrwedigitekprd.azurecr.io/quality-control-webserver:latest
         ports:
         - containerPort: 80
         envFrom:

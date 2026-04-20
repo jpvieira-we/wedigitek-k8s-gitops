@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: we-docs
-        image: registry.gitlab.com/wedigitek1/we-docs:master
+        image: acrwedigitekprd.azurecr.io/we-docs:latest
         ports:
         - containerPort: 80
         envFrom:

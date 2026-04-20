@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: sefaz-services
-        image: registry.gitlab.com/wedigitek1/we-food/services/sefaz-services:master
+        image: acrwedigitekprd.azurecr.io/sefaz-services:latest
         envFrom:
         - secretRef:
             name: sefaz-services-secrets

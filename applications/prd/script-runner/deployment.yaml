@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: script-runner
-        image: registry.gitlab.com/wedigitek1/we-food/script-runner:master
+        image: acrwedigitekprd.azurecr.io/script-runner:latest
         envFrom:
         - secretRef:
             name: script-runner-secrets

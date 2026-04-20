@@ -8,6 +8,8 @@
 *secret*.yml
 !sealed-secret*.yaml
 !sealed-secret*.yml
+!**/secretproviderclass-*.yaml
+!**/secretproviderclass-*.yml
 
 # Arquivos temporários
 *.tmp
