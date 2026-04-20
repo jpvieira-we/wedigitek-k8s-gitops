@@ -8,10 +8,10 @@ resources:
   - deployment.yaml
   - service.yaml
 
-commonLabels:
-  app: billing
-  environment: production
-  managed-by: argocd
+labels:
+  - pairs:
+      environment: production
+      managed-by: argocd
 
 images:
   - name: acrwedigitekprd.azurecr.io/billing

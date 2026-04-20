@@ -8,16 +8,15 @@ resources:
   - deployment.yaml
   - service.yaml
   - configmap.yaml
-  - secret.yaml
   - ingress.yaml
   - hpa.yaml
   - secretproviderclass-env.yaml
   - secretproviderclass-files.yaml
 
-commonLabels:
-  app: we-api
-  environment: production
-  managed-by: argocd
+labels:
+  - pairs:
+      environment: production
+      managed-by: argocd
 
 images:
   - name: acrwedigitekprd.azurecr.io/we-api
