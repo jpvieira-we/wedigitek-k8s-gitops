@@ -16,4 +16,5 @@ labels:
 
 images:
   - name: acrwedigitekprd.azurecr.io/reports
-    newTag: latest
+    newName: ghcr.io/wedigitek/we-services-reports
+    newTag: rc

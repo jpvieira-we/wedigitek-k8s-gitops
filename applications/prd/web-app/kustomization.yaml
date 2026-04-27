@@ -3,3 +3,8 @@ kind: Kustomization
 resources:
 - deployment.yaml
 - service.yaml
+
+images:
+  - name: acrwedigitekprd.azurecr.io/web-app
+    newName: ghcr.io/wedigitek/web-app
+    newTag: main

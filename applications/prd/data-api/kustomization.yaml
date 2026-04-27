@@ -16,4 +16,5 @@ labels:
 
 images:
   - name: acrwedigitekprd.azurecr.io/data-api
-    newTag: latest
+    newName: ghcr.io/wedigitek/data-api
+    newTag: main

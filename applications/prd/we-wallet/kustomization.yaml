@@ -16,4 +16,5 @@ labels:
 
 images:
   - name: acrwedigitekprd.azurecr.io/we-wallet
-    newTag: latest
+    newName: ghcr.io/wedigitek/we-wallet
+    newTag: main

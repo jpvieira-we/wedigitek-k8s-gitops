@@ -20,4 +20,5 @@ labels:
 
 images:
   - name: acrwedigitekprd.azurecr.io/we-api
-    newTag: latest
+    newName: ghcr.io/wedigitek/we-api
+    newTag: rc

@@ -16,4 +16,5 @@ labels:
 
 images:
   - name: acrwedigitekprd.azurecr.io/wefood-realtime-server
-    newTag: latest
+    newName: ghcr.io/wedigitek/wefood-realtime-server
+    newTag: main

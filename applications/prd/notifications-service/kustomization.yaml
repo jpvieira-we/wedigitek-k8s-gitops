@@ -16,4 +16,5 @@ labels:
 
 images:
   - name: acrwedigitekprd.azurecr.io/notifications-service
-    newTag: latest
+    newName: ghcr.io/wedigitek/we-services-notifications
+    newTag: rc

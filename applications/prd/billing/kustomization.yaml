@@ -17,4 +17,5 @@ labels:
 
 images:
   - name: acrwedigitekprd.azurecr.io/billing
-    newTag: latest
+    newName: ghcr.io/wedigitek/we-services-billing
+    newTag: rc

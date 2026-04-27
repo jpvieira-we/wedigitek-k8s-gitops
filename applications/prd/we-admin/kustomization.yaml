@@ -16,4 +16,5 @@ labels:
 
 images:
   - name: acrwedigitekprd.azurecr.io/we-admin
-    newTag: latest
+    newName: ghcr.io/wedigitek/we-admin
+    newTag: main
