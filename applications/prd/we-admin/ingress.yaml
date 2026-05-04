@@ -13,11 +13,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - admin-new.wefood.com
+    - admin.trywefood.dev
     secretName: we-admin-tls
   
   rules:
-  - host: admin-new.wefood.com
+  - host: admin.trywefood.dev
     http:
       paths:
       - path: /

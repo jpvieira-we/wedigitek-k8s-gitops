@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: web-app-prd
+  labels:
+    name: web-app-prd
+    environment: production

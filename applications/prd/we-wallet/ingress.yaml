@@ -13,11 +13,22 @@ metadata:
 spec:
   tls:
   - hosts:
-    - wallet-new.wefood.com
+    - wecampus.trywefood.dev
+    - wallet.trywefood.dev
     secretName: we-wallet-tls
   
   rules:
-  - host: wallet-new.wefood.com
+  - host: wecampus.trywefood.dev
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: we-wallet
+            port:
+              number: 80
+  - host: wallet.trywefood.dev
     http:
       paths:
       - path: /

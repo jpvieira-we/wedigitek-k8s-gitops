@@ -13,11 +13,22 @@ metadata:
 spec:
   tls:
   - hosts:
-    - app-new.wefood.com
+    - sodexodirect.trywefood.dev
+    - grsa.trywefood.dev
     secretName: web-app-tls
   
   rules:
-  - host: app-new.wefood.com
+  - host: sodexodirect.trywefood.dev
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web-app
+            port:
+              number: 80
+  - host: grsa.trywefood.dev
     http:
       paths:
       - path: /

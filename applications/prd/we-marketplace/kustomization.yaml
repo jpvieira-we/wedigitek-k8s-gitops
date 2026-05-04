@@ -1,11 +1,20 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+
+namespace: we-marketplace-prd
+
 resources:
+- namespace.yaml
+- secretproviderclass-env.yaml
 - deployment.yaml
 - service.yaml
 - ingress.yaml
 
+labels:
+  - pairs:
+      environment: production
+      managed-by: argocd
+
 images:
-  - name: acrwedigitekprd.azurecr.io/we-marketplace
-    newName: ghcr.io/wedigitek/web-marketplace
-    newTag: main
+  - name: ghcr.io/wedigitek/web-marketplace
+    newTag: rc

@@ -13,11 +13,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - surveys-new.wefood.com
+    - surveys.trywefood.dev
     secretName: surveys-tls
   
   rules:
-  - host: surveys-new.wefood.com
+  - host: surveys.trywefood.dev
     http:
       paths:
       - path: /

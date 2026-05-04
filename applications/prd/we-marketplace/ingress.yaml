@@ -13,11 +13,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - marketplace-new.wefood.com
+    - marketplace.trywefood.dev
     secretName: we-marketplace-tls
   
   rules:
-  - host: marketplace-new.wefood.com
+  - host: marketplace.trywefood.dev
     http:
       paths:
       - path: /

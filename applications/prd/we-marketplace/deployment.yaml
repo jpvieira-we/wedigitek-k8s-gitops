@@ -2,11 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: we-marketplace
-  namespace: wedigitek-prd
+  namespace: we-marketplace-prd
   labels:
     app: we-marketplace
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: we-marketplace
@@ -17,13 +17,27 @@ spec:
     spec:
       containers:
       - name: we-marketplace
-        image: ghcr.io/wedigitek/web-marketplace:master
+        image: ghcr.io/wedigitek/web-marketplace:rc
         ports:
         - containerPort: 80
+        envFrom:
+        - secretRef:
+            name: we-marketplace-secrets-kv
+        volumeMounts:
+        - name: keyvault-env
+          mountPath: /mnt/secrets-store
+          readOnly: true
         resources:
           requests:
-            memory: "128Mi"
-            cpu: "50m"
-          limits:
             memory: "256Mi"
             cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "200m"
+      volumes:
+      - name: keyvault-env
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: we-marketplace-keyvault-env
