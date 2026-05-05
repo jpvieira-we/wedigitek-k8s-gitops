@@ -2,11 +2,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: we-docs
-  namespace: wedigitek-prd
+  namespace: we-docs-prd
   labels:
     app: we-docs
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: we-docs
@@ -17,16 +22,30 @@ spec:
     spec:
       containers:
       - name: we-docs
-        image: acrwedigitekprd.azurecr.io/we-docs:latest
+        image: ghcr.io/wedigitek/we-docs:latest
+        imagePullPolicy: Always
         ports:
-        - containerPort: 80
+        - name: http
+          containerPort: 80
+          protocol: TCP
         envFrom:
         - secretRef:
-            name: we-docs-secrets
+            name: we-docs-secrets-kv
+        volumeMounts:
+        - name: keyvault-env
+          mountPath: /mnt/secrets-store
+          readOnly: true
         resources:
           requests:
             memory: "128Mi"
             cpu: "50m"
           limits:
             memory: "256Mi"
-            cpu: "50m"
+            cpu: "100m"
+      volumes:
+      - name: keyvault-env
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: we-docs-keyvault-env

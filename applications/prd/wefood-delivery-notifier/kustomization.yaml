@@ -15,5 +15,5 @@ labels:
       managed-by: argocd
 
 images:
-  - name: acrwedigitekprd.azurecr.io/wefood-delivery-notifier
+  - name: ghcr.io/wedigitek/wefood-delivery-notifier
     newTag: latest

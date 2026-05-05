@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: we-docs-prd
+  labels:
+    name: we-docs-prd
+    environment: production

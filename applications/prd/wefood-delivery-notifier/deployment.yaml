@@ -29,11 +29,14 @@ spec:
             secretProviderClass: wefood-delivery-notifier-keyvault-env
       containers:
       - name: wefood-delivery-notifier
-        image: acrwedigitekprd.azurecr.io/wefood-delivery-notifier:latest
+        image: ghcr.io/wedigitek/wefood-delivery-notifier:latest
         imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: wefood-delivery-notifier-secrets-kv
         volumeMounts:
         - name: keyvault-env
-          mountPath: /mnt/keyvault-env
+          mountPath: /mnt/secrets-store
           readOnly: true
         ports:
         - name: http
