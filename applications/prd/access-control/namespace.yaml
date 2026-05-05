@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: access-control-prd
+  labels:
+    name: access-control-prd
+    environment: production

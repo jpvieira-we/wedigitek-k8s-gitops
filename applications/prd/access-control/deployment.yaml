@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: activity-logs-service
-  namespace: activity-logs-service-prd
+  name: access-control
+  namespace: access-control-prd
   labels:
-    app: activity-logs-service
+    app: access-control
 spec:
   replicas: 2
   strategy:
@@ -14,15 +14,15 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: activity-logs-service
+      app: access-control
   template:
     metadata:
       labels:
-        app: activity-logs-service
+        app: access-control
     spec:
       containers:
-      - name: activity-logs-service
-        image: ghcr.io/wedigitek/we-services-auditlogs:rc
+      - name: access-control
+        image: ghcr.io/wedigitek/we-services-access-control:rc
         imagePullPolicy: Always
         ports:
         - name: http
@@ -30,7 +30,7 @@ spec:
           protocol: TCP
         envFrom:
         - secretRef:
-            name: activity-logs-service-secrets-kv
+            name: access-control-secrets-kv
         volumeMounts:
         - name: keyvault-env
           mountPath: /mnt/secrets-store
@@ -48,4 +48,4 @@ spec:
           driver: secrets-store.csi.k8s.io
           readOnly: true
           volumeAttributes:
-            secretProviderClass: activity-logs-service-keyvault-env
+            secretProviderClass: access-control-keyvault-env

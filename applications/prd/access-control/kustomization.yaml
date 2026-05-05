@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: activity-logs-service-prd
+namespace: access-control-prd
 
 resources:
   - namespace.yaml
@@ -15,5 +15,5 @@ labels:
       managed-by: argocd
 
 images:
-  - name: ghcr.io/wedigitek/we-services-auditlogs
+  - name: ghcr.io/wedigitek/we-services-access-control
     newTag: rc

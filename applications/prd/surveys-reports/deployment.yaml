@@ -1,36 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: activity-logs-service
-  namespace: activity-logs-service-prd
+  name: surveys-reports
+  namespace: surveys-reports-prd
   labels:
-    app: activity-logs-service
+    app: surveys-reports
 spec:
   replicas: 2
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
   selector:
     matchLabels:
-      app: activity-logs-service
+      app: surveys-reports
   template:
     metadata:
       labels:
-        app: activity-logs-service
+        app: surveys-reports
     spec:
       containers:
-      - name: activity-logs-service
-        image: ghcr.io/wedigitek/we-services-auditlogs:rc
-        imagePullPolicy: Always
+      - name: surveys-reports
+        image: ghcr.io/wedigitek/reports-surveys:rc
         ports:
-        - name: http
-          containerPort: 3000
-          protocol: TCP
+        - containerPort: 3000
         envFrom:
         - secretRef:
-            name: activity-logs-service-secrets-kv
+            name: surveys-reports-secrets-kv
         volumeMounts:
         - name: keyvault-env
           mountPath: /mnt/secrets-store
@@ -41,11 +33,11 @@ spec:
             cpu: "100m"
           limits:
             memory: "512Mi"
-            cpu: "500m"
+            cpu: "200m"
       volumes:
       - name: keyvault-env
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
           volumeAttributes:
-            secretProviderClass: activity-logs-service-keyvault-env
+            secretProviderClass: surveys-reports-keyvault-env
