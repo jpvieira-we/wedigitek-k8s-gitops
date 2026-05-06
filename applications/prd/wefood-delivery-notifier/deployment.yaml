@@ -29,7 +29,7 @@ spec:
             secretProviderClass: wefood-delivery-notifier-keyvault-env
       containers:
       - name: wefood-delivery-notifier
-        image: ghcr.io/wedigitek/wefood-delivery-notifier:latest
+        image: acrwedigitekprd.azurecr.io/wefood-delivery-notifier:latest
         imagePullPolicy: Always
         envFrom:
         - secretRef:

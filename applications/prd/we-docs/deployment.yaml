@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: we-docs
-        image: ghcr.io/wedigitek/we-docs:latest
+        image: acrwedigitekprd.azurecr.io/we-docs:latest
         imagePullPolicy: Always
         ports:
         - name: http

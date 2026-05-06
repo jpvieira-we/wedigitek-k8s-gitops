@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: activity-logs-service
-        image: ghcr.io/wedigitek/we-services-auditlogs:rc
+        image: acrwedigitekprd.azurecr.io/we-api-activity-logs-service:latest
         imagePullPolicy: Always
         ports:
         - name: http
