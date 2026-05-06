@@ -27,23 +27,27 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: billing-keyvault-env
-      - name: keyvault-files
-        csi:
-          driver: secrets-store.csi.k8s.io
-          readOnly: true
-          volumeAttributes:
-            secretProviderClass: billing-keyvault-files
+      - name: sefaz-certificates
+        persistentVolumeClaim:
+          claimName: sefaz-certificates
+      - name: cdn-invoices
+        persistentVolumeClaim:
+          claimName: cdn-invoices
       containers:
       - name: billing
         image: acrwedigitekprd.azurecr.io/billing:latest
         imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: billing-secrets-kv
         volumeMounts:
         - name: keyvault-env
-          mountPath: /mnt/keyvault-env
+          mountPath: /mnt/secrets-store
           readOnly: true
-        - name: keyvault-files
-          mountPath: /billing/certs
-          readOnly: true
+        - name: sefaz-certificates
+          mountPath: /app/certificates
+        - name: cdn-invoices
+          mountPath: /app/invoices/xml
         ports:
         - name: http
           containerPort: 3000
