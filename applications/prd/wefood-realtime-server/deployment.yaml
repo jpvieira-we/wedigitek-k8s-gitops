@@ -31,6 +31,9 @@ spec:
       - name: wefood-realtime-server
         image: acrwedigitekprd.azurecr.io/wefood-realtime-server:latest
         imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: wefood-realtime-server-secrets-kv
         volumeMounts:
         - name: keyvault-env
           mountPath: /mnt/keyvault-env

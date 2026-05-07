@@ -31,6 +31,9 @@ spec:
       - name: surveys
         image: acrwedigitekprd.azurecr.io/surveys:latest
         imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: surveys-secrets-kv
         volumeMounts:
         - name: keyvault-env
           mountPath: /mnt/keyvault-env

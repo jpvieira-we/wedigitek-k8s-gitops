@@ -31,6 +31,9 @@ spec:
       - name: notifications-service
         image: acrwedigitekprd.azurecr.io/notifications-service:latest
         imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: notifications-service-secrets-kv
         volumeMounts:
         - name: keyvault-env
           mountPath: /mnt/keyvault-env

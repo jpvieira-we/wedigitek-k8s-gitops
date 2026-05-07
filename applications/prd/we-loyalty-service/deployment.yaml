@@ -31,6 +31,9 @@ spec:
       - name: we-loyalty-service
         image: acrwedigitekprd.azurecr.io/we-loyalty-service:latest
         imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: we-loyalty-service-secrets-kv
         volumeMounts:
         - name: keyvault-env
           mountPath: /mnt/keyvault-env

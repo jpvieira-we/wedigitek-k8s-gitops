@@ -31,6 +31,9 @@ spec:
       - name: devices-api
         image: acrwedigitekprd.azurecr.io/devices-api:latest
         imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: devices-api-secrets-kv
         volumeMounts:
         - name: keyvault-env
           mountPath: /mnt/keyvault-env

@@ -31,6 +31,9 @@ spec:
       - name: data-api
         image: acrwedigitekprd.azurecr.io/data-api:latest
         imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: data-api-secrets-kv
         volumeMounts:
         - name: keyvault-env
           mountPath: /mnt/keyvault-env

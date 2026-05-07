@@ -31,6 +31,9 @@ spec:
       - name: quality-control
         image: acrwedigitekprd.azurecr.io/quality-control:latest
         imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: quality-control-secrets-kv
         volumeMounts:
         - name: keyvault-env
           mountPath: /mnt/keyvault-env

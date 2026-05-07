@@ -31,6 +31,9 @@ spec:
       - name: reports
         image: acrwedigitekprd.azurecr.io/reports:latest
         imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: reports-secrets-kv
         volumeMounts:
         - name: keyvault-env
           mountPath: /mnt/keyvault-env

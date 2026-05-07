@@ -31,6 +31,9 @@ spec:
       - name: we-api-integrations-service
         image: acrwedigitekprd.azurecr.io/we-api-integrations-service:latest
         imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: we-api-integrations-service-secrets-kv
         volumeMounts:
         - name: keyvault-env
           mountPath: /mnt/keyvault-env
