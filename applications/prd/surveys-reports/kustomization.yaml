@@ -15,6 +15,3 @@ labels:
       environment: production
       managed-by: argocd
 
-images:
-  - name: ghcr.io/wedigitek/reports-surveys
-    newTag: rc

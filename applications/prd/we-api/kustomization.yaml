@@ -17,8 +17,3 @@ labels:
   - pairs:
       environment: production
       managed-by: argocd
-
-images:
-  - name: acrwedigitekprd.azurecr.io/we-api
-    newName: ghcr.io/wedigitek/we-api
-    newTag: rc

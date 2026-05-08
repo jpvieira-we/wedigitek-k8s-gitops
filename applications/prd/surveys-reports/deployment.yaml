@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: surveys-reports
-        image: ghcr.io/wedigitek/reports-surveys:rc
+        image: acrwedigitekprd.azurecr.io/surveys-reports:latest
         ports:
         - containerPort: 3000
         envFrom:

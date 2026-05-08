@@ -13,8 +13,3 @@ labels:
   - pairs:
       environment: production
       managed-by: argocd
-
-images:
-  - name: acrwedigitekprd.azurecr.io/notifications-service
-    newName: ghcr.io/wedigitek/we-services-notifications
-    newTag: rc

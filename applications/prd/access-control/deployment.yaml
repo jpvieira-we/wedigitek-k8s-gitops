@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: access-control
-        image: ghcr.io/wedigitek/we-services-access-control:rc
+        image: acrwedigitekprd.azurecr.io/access-control:latest
         imagePullPolicy: Always
         ports:
         - name: http

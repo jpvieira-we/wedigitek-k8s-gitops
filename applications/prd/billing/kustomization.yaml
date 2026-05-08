@@ -14,8 +14,3 @@ labels:
   - pairs:
       environment: production
       managed-by: argocd
-
-images:
-  - name: acrwedigitekprd.azurecr.io/billing
-    newName: ghcr.io/wedigitek/we-services-billing
-    newTag: rc
