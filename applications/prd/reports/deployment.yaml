@@ -20,6 +20,8 @@ spec:
       labels:
         app: reports
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       volumes:
       - name: keyvault-env
         csi:
@@ -29,7 +31,7 @@ spec:
             secretProviderClass: reports-keyvault-env
       containers:
       - name: reports
-        image: acrwedigitekprd.azurecr.io/reports:latest
+        image: ghcr.io/wedigitek/we-services-reports:rc
         imagePullPolicy: Always
         envFrom:
         - secretRef:

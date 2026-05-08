@@ -15,9 +15,11 @@ spec:
       labels:
         app: surveys-reports
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       containers:
       - name: surveys-reports
-        image: acrwedigitekprd.azurecr.io/surveys-reports:latest
+        image: ghcr.io/wedigitek/reports-surveys:rc
         ports:
         - containerPort: 3000
         envFrom:

@@ -26,6 +26,8 @@ spec:
         app: we-api
         version: v3.22.4
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       volumes:
       - name: keyvault-env
         csi:
@@ -41,7 +43,7 @@ spec:
             secretProviderClass: we-api-keyvault-files
       containers:
       - name: we-api
-        image: acrwedigitekprd.azurecr.io/we-api:latest
+        image: ghcr.io/wedigitek/we-api:rc
         imagePullPolicy: Always
         envFrom:
         - configMapRef:

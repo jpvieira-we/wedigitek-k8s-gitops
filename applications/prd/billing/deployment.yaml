@@ -20,6 +20,8 @@ spec:
       labels:
         app: billing
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       volumes:
       - name: keyvault-env
         csi:
@@ -35,7 +37,7 @@ spec:
           claimName: cdn-invoices
       containers:
       - name: billing
-        image: acrwedigitekprd.azurecr.io/billing:latest
+        image: ghcr.io/wedigitek/we-services-billing:rc
         imagePullPolicy: Always
         envFrom:
         - secretRef:

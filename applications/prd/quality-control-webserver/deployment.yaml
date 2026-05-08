@@ -15,9 +15,11 @@ spec:
       labels:
         app: quality-control-webserver
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       containers:
       - name: quality-control-webserver
-        image: acrwedigitekprd.azurecr.io/quality-control-webserver:latest
+        image: ghcr.io/wedigitek/webserver-quality-control:rc
         ports:
         - containerPort: 80
         envFrom:

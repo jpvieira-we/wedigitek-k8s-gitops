@@ -20,6 +20,8 @@ spec:
       labels:
         app: notifications-service
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       volumes:
       - name: keyvault-env
         csi:
@@ -29,7 +31,7 @@ spec:
             secretProviderClass: notifications-service-keyvault-env
       containers:
       - name: notifications-service
-        image: acrwedigitekprd.azurecr.io/notifications-service:latest
+        image: ghcr.io/wedigitek/we-services-notifications:rc
         imagePullPolicy: Always
         envFrom:
         - secretRef:

@@ -15,9 +15,11 @@ spec:
       labels:
         app: we-marketplace
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       containers:
       - name: we-marketplace
-        image: acrwedigitekprd.azurecr.io/we-marketplace:latest
+        image: ghcr.io/wedigitek/web-marketplace:rc
         ports:
         - containerPort: 80
         envFrom:

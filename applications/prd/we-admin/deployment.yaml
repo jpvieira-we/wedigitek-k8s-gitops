@@ -20,6 +20,8 @@ spec:
       labels:
         app: we-admin
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       volumes:
       - name: keyvault-env
         csi:
@@ -29,7 +31,7 @@ spec:
             secretProviderClass: we-admin-keyvault-env
       containers:
       - name: we-admin
-        image: acrwedigitekprd.azurecr.io/we-admin:latest
+        image: ghcr.io/wedigitek/we-admin:rc
         imagePullPolicy: Always
         volumeMounts:
         - name: keyvault-env

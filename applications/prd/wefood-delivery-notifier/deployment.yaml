@@ -20,6 +20,8 @@ spec:
       labels:
         app: wefood-delivery-notifier
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       volumes:
       - name: keyvault-env
         csi:
@@ -29,7 +31,7 @@ spec:
             secretProviderClass: wefood-delivery-notifier-keyvault-env
       containers:
       - name: wefood-delivery-notifier
-        image: acrwedigitekprd.azurecr.io/wefood-delivery-notifier:latest
+        image: ghcr.io/wedigitek/delivery-notifier:rc
         imagePullPolicy: Always
         envFrom:
         - secretRef:

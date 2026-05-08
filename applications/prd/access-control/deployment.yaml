@@ -20,9 +20,11 @@ spec:
       labels:
         app: access-control
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       containers:
       - name: access-control
-        image: acrwedigitekprd.azurecr.io/access-control:latest
+        image: ghcr.io/wedigitek/we-services-access-control:rc
         imagePullPolicy: Always
         ports:
         - name: http

@@ -15,9 +15,11 @@ spec:
       labels:
         app: we-menu
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       containers:
       - name: we-menu
-        image: registry.gitlab.com/wedigitek1/we-food/we-menu:master
+        image: ghcr.io/wedigitek/we-menu:rc
         ports:
         - containerPort: 80
         resources:

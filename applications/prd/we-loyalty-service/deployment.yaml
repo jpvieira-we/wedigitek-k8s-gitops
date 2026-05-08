@@ -20,6 +20,8 @@ spec:
       labels:
         app: we-loyalty-service
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       volumes:
       - name: keyvault-env
         csi:
@@ -29,7 +31,7 @@ spec:
             secretProviderClass: we-loyalty-service-keyvault-env
       containers:
       - name: we-loyalty-service
-        image: acrwedigitekprd.azurecr.io/we-loyalty-service:latest
+        image: ghcr.io/wedigitek/we-services-loyalty:rc
         imagePullPolicy: Always
         envFrom:
         - secretRef:

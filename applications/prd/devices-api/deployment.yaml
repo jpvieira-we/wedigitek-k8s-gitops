@@ -20,6 +20,8 @@ spec:
       labels:
         app: devices-api
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       volumes:
       - name: keyvault-env
         csi:
@@ -29,7 +31,7 @@ spec:
             secretProviderClass: devices-api-keyvault-env
       containers:
       - name: devices-api
-        image: acrwedigitekprd.azurecr.io/devices-api:latest
+        image: ghcr.io/wedigitek/api-devices:rc
         imagePullPolicy: Always
         envFrom:
         - secretRef:

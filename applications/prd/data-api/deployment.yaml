@@ -20,6 +20,8 @@ spec:
       labels:
         app: data-api
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       volumes:
       - name: keyvault-env
         csi:
@@ -29,7 +31,7 @@ spec:
             secretProviderClass: data-api-keyvault-env
       containers:
       - name: data-api
-        image: acrwedigitekprd.azurecr.io/data-api:latest
+        image: ghcr.io/wedigitek/data-api:rc
         imagePullPolicy: Always
         envFrom:
         - secretRef:

@@ -15,9 +15,11 @@ spec:
       labels:
         app: script-runner
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       containers:
       - name: script-runner
-        image: acrwedigitekprd.azurecr.io/script-runner:latest
+        image: ghcr.io/wedigitek/script-runner:rc
         envFrom:
         - secretRef:
             name: script-runner-secrets

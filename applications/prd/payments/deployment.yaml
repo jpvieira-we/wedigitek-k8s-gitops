@@ -20,6 +20,8 @@ spec:
       labels:
         app: payments
     spec:
+      imagePullSecrets:
+      - name: ghcr-pull-secret
       volumes:
       - name: keyvault-env
         csi:
@@ -29,7 +31,7 @@ spec:
             secretProviderClass: payments-keyvault-env
       containers:
       - name: payments
-        image: acrwedigitekprd.azurecr.io/payments:latest
+        image: ghcr.io/wedigitek/we-services-payments:rc
         imagePullPolicy: Always
         envFrom:
         - secretRef:
