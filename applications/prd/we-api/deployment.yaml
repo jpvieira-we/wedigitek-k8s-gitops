@@ -55,6 +55,8 @@ spec:
               items:
               - key: ticket-public-cert.cer
                 path: ticket-public-cert.cer
+              - key: ticket-public-cert.cer
+                path: edenred/partner-lab-wedigitek.edenred.net_2022.cer
               - key: AuthKey_9984Z5GVCJ.p8
                 path: AuthKey_9984Z5GVCJ.p8
           - secret:
