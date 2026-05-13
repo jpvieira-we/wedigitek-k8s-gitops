@@ -38,7 +38,7 @@ spec:
             name: wefood-delivery-notifier-secrets-kv
         env:
         - name: NODE_PATH
-          value: "."
+          value: "/wefood-delivery-notifier"
         volumeMounts:
         - name: keyvault-env
           mountPath: /mnt/secrets-store
