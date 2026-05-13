@@ -87,8 +87,14 @@ spec:
         - name: tokens
           mountPath: /we-api/tokens
           readOnly: true
+        - name: tokens
+          mountPath: /tokens
+          readOnly: true
         - name: all-certs
           mountPath: /we-api/certs
+          readOnly: true
+        - name: all-certs
+          mountPath: /certs
           readOnly: true
         - name: apikeys
           mountPath: /we-api/apiKeys
