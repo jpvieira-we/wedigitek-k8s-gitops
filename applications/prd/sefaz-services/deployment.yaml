@@ -20,9 +20,12 @@ spec:
       containers:
       - name: sefaz-services
         image: ghcr.io/wedigitek/sefaz-services:rc
+        imagePullPolicy: Always
         envFrom:
         - secretRef:
             name: sefaz-services-secrets
+        ports:
+        - containerPort: 80
         volumeMounts:
         - name: sefaz-certificates
           mountPath: /app/certificates
