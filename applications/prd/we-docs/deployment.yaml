@@ -37,6 +37,10 @@ spec:
         - name: keyvault-env
           mountPath: /mnt/secrets-store
           readOnly: true
+        - name: we-docs-tokens
+          mountPath: /we-docs/tokens/access.json
+          subPath: access.json
+          readOnly: true
         resources:
           requests:
             memory: "128Mi"
@@ -51,3 +55,6 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: we-docs-keyvault-env
+      - name: we-docs-tokens
+        secret:
+          secretName: we-docs-secrets-kv

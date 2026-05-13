@@ -6,7 +6,7 @@ metadata:
   labels:
     app: we-menu
 spec:
-  replicas: 2
+  replicas: 0
   selector:
     matchLabels:
       app: we-menu

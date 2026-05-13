@@ -31,7 +31,7 @@ spec:
             secretProviderClass: wefood-realtime-server-keyvault-env
       containers:
       - name: wefood-realtime-server
-        image: ghcr.io/wedigitek/wefood-realtime-server:rc
+        image: ghcr.io/wedigitek/wefood-realtime-server:main
         imagePullPolicy: Always
         envFrom:
         - secretRef:
