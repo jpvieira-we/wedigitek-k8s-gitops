@@ -33,6 +33,11 @@ spec:
         envFrom:
         - secretRef:
             name: we-docs-secrets-kv
+        env:
+        - name: PORT
+          value: "80"
+        - name: SERVER_PORT
+          value: "80"
         volumeMounts:
         - name: keyvault-env
           mountPath: /mnt/secrets-store
