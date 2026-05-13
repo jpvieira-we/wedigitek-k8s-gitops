@@ -57,6 +57,13 @@ spec:
                 path: ticket-public-cert.cer
               - key: AuthKey_9984Z5GVCJ.p8
                 path: AuthKey_9984Z5GVCJ.p8
+          - secret:
+              name: we-api-tokens
+              items:
+              - key: jwtRS256.key
+                path: jwtRS256.key
+              - key: jwtRS256.key.pub
+                path: jwtRS256.key.pub
       - name: apikeys
         secret:
           secretName: we-api-apikeys
