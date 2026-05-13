@@ -4,7 +4,6 @@ kind: Kustomization
 namespace: wefood-delivery-notifier-prd
 
 resources:
-  - secretproviderclass-env.yaml
   - namespace.yaml
   - deployment.yaml
   - service.yaml

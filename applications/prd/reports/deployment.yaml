@@ -31,8 +31,8 @@ spec:
             secretProviderClass: reports-keyvault-env
       containers:
       - name: reports
-        image: ghcr.io/wedigitek/we-services-reports:rc
-        imagePullPolicy: Always
+        image: ghcr.io/wedigitek/we-services-reports:develop
+        imagePullPolicy: IfNotPresent
         envFrom:
         - secretRef:
             name: reports-secrets-kv
@@ -51,17 +51,4 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "200m"
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 120
-          periodSeconds: 30
-          timeoutSeconds: 15
-          failureThreshold: 10
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 10
-          periodSeconds: 5
+

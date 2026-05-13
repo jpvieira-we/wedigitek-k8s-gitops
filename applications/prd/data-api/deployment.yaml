@@ -32,7 +32,7 @@ spec:
       containers:
       - name: data-api
         image: ghcr.io/wedigitek/data-api:rc
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         envFrom:
         - secretRef:
             name: data-api-secrets-kv

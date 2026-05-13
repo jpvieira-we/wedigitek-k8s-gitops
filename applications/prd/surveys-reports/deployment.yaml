@@ -20,6 +20,7 @@ spec:
       containers:
       - name: surveys-reports
         image: ghcr.io/wedigitek/reports-surveys:rc
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
         envFrom:

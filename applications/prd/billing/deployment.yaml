@@ -38,7 +38,7 @@ spec:
       containers:
       - name: billing
         image: ghcr.io/wedigitek/we-services-billing:rc
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         envFrom:
         - secretRef:
             name: billing-secrets-kv
@@ -61,17 +61,4 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "200m"
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 90
-          periodSeconds: 30
-          timeoutSeconds: 10
-          failureThreshold: 5
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 10
-          periodSeconds: 5
+

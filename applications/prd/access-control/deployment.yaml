@@ -25,7 +25,7 @@ spec:
       containers:
       - name: access-control
         image: ghcr.io/wedigitek/we-services-access-control:rc
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - name: http
           containerPort: 3000
