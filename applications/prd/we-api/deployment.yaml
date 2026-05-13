@@ -35,12 +35,31 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: we-api-keyvault-env
-      - name: keyvault-files
-        csi:
-          driver: secrets-store.csi.k8s.io
-          readOnly: true
-          volumeAttributes:
-            secretProviderClass: we-api-keyvault-files
+      - name: tokens
+        secret:
+          secretName: we-api-tokens
+      - name: all-certs
+        projected:
+          sources:
+          - secret:
+              name: we-api-firebase-certs
+              items:
+              - key: menugrsa.json
+                path: firebase/menugrsa.json
+              - key: deli-2f288.json
+                path: firebase/deli-2f288.json
+              - key: sodexo-54882.json
+                path: firebase/sodexo-54882.json
+          - secret:
+              name: we-api-certs
+              items:
+              - key: ticket-public-cert.cer
+                path: ticket-public-cert.cer
+              - key: AuthKey_9984Z5GVCJ.p8
+                path: AuthKey_9984Z5GVCJ.p8
+      - name: apikeys
+        secret:
+          secretName: we-api-apikeys
       containers:
       - name: we-api
         image: ghcr.io/wedigitek/we-api:rc
@@ -58,8 +77,14 @@ spec:
         - name: keyvault-env
           mountPath: /mnt/keyvault-env
           readOnly: true
-        - name: keyvault-files
+        - name: tokens
+          mountPath: /we-api/tokens
+          readOnly: true
+        - name: all-certs
           mountPath: /we-api/certs
+          readOnly: true
+        - name: apikeys
+          mountPath: /we-api/apiKeys
           readOnly: true
         resources:
           requests:
