@@ -37,9 +37,7 @@ spec:
         - secretRef:
             name: we-loyalty-service-secrets-kv
         env:
-        - name: PORT
-          value: "3000"
-        - name: SERVER_PORT
+        - name: WE_LOYALTY_SERVICE_PORT
           value: "3000"
         volumeMounts:
         - name: keyvault-env

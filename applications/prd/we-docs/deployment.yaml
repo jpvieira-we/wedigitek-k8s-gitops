@@ -34,9 +34,7 @@ spec:
         - secretRef:
             name: we-docs-secrets-kv
         env:
-        - name: PORT
-          value: "80"
-        - name: SERVER_PORT
+        - name: WE_DOCS_PORT
           value: "80"
         volumeMounts:
         - name: keyvault-env
