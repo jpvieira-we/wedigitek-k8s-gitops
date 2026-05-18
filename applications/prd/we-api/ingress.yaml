@@ -30,36 +30,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - api.wefood.com  # ATUALIZAR com domínio real
-    - api-new.wefood.com  # Domínio temporário para testes paralelos
     - api.trywefood.dev
     secretName: we-api-tls
   
   rules:
-  # Produção (após cutover)
-  - host: api.wefood.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: we-api
-            port:
-              number: 80
-  
-  # Temporário para testes (ambiente paralelo)
-  - host: api-new.wefood.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: we-api
-            port:
-              number: 80
-
   - host: api.trywefood.dev
     http:
       paths:
