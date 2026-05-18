@@ -5,6 +5,7 @@ namespace: wefood-onboarding-prd
 
 resources:
   - namespace.yaml
+  - ghcr-pull.yaml
   - deployment.yaml
   - service.yaml
   - ingress.yaml

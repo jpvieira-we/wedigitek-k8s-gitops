@@ -5,6 +5,7 @@ namespace: we-marketplace-prd
 
 resources:
 - namespace.yaml
+- ghcr-pull.yaml
 - secretproviderclass-env.yaml
 - deployment.yaml
 - service.yaml

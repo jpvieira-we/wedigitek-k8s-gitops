@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ghcr-pull-secret
+  namespace: web-app-prd
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyJnaGNyLmlvIjp7InVzZXJuYW1lIjoianB2aWVpcmEtd2UiLCJwYXNzd29yZCI6Imdob18xQkFFY3EzdzJ2V0VzZmpvWHVkVDNmT0tOdlNxbGswUExxODkiLCJhdXRoIjoiYW5CMmFXVnBjbUV0ZDJVNloyaHZYekZDUVVWamNUTjNNblpYUlhObWFtOVlkV1JVTTJaUFMwNTJVM0ZzYXpCUVRIRTRPUT09In19fQ==
