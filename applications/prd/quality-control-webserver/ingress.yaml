@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: web-app
-  namespace: web-app-prd
+  name: quality-control-webserver
+  namespace: wedigitek-prd
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
@@ -13,28 +13,17 @@ metadata:
 spec:
   tls:
   - hosts:
-    - web.trywefood.dev
-    - grsa.trywefood.dev
-    secretName: web-app-tls
-  
+    - qualitycontrol.trywefood.dev
+    secretName: quality-control-webserver-tls
+
   rules:
-  - host: web.trywefood.dev
+  - host: qualitycontrol.trywefood.dev
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: web-app
-            port:
-              number: 80
-  - host: grsa.trywefood.dev
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: web-app
+            name: quality-control-webserver
             port:
               number: 80

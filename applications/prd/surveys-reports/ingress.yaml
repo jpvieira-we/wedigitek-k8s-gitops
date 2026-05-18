@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - surveys-api.services.wefood.dev
+    - surveys.services.trywefood.dev
     secretName: surveys-reports-tls
   rules:
-  - host: surveys-api.services.wefood.dev
+  - host: surveys.services.trywefood.dev
     http:
       paths:
       - path: /
