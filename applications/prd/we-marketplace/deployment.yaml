@@ -22,13 +22,6 @@ spec:
         image: ghcr.io/wedigitek/web-marketplace:rc
         ports:
         - containerPort: 80
-        envFrom:
-        - secretRef:
-            name: we-marketplace-secrets-kv
-        volumeMounts:
-        - name: keyvault-env
-          mountPath: /mnt/secrets-store
-          readOnly: true
         resources:
           requests:
             memory: "256Mi"
@@ -36,10 +29,3 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "200m"
-      volumes:
-      - name: keyvault-env
-        csi:
-          driver: secrets-store.csi.k8s.io
-          readOnly: true
-          volumeAttributes:
-            secretProviderClass: we-marketplace-keyvault-env

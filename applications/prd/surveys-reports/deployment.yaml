@@ -22,7 +22,7 @@ spec:
         image: ghcr.io/wedigitek/reports-surveys:rc
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 3000
+        - containerPort: 8050
         envFrom:
         - secretRef:
             name: surveys-reports-secrets-kv

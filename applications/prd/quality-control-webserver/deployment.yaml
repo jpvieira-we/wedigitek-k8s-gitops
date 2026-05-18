@@ -21,7 +21,7 @@ spec:
       - name: quality-control-webserver
         image: ghcr.io/wedigitek/webserver-quality-control:rc
         ports:
-        - containerPort: 80
+        - containerPort: 3000
         envFrom:
         - secretRef:
             name: quality-control-webserver-secrets
