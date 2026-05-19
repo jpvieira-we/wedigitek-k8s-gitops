@@ -73,6 +73,9 @@ spec:
       - name: we-api
         image: ghcr.io/wedigitek/we-api:rc
         imagePullPolicy: Always
+        env:
+        - name: WE_API_ACTIVE_SERVICES_MONIT
+          value: "[]"
         envFrom:
         - configMapRef:
             name: we-api-config
