@@ -31,10 +31,22 @@ spec:
   tls:
   - hosts:
     - api.trywefood.dev
+    - api.direct.trywefood.dev
     secretName: we-api-tls
   
   rules:
   - host: api.trywefood.dev
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: we-api
+            port:
+              number: 80
+
+  - host: api.direct.trywefood.dev
     http:
       paths:
       - path: /
