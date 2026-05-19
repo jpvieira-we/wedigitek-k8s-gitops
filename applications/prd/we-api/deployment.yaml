@@ -75,7 +75,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: WE_API_ACTIVE_SERVICES_MONIT
-          value: "[]"
+          value: '["$node"]'
         envFrom:
         - configMapRef:
             name: we-api-config
