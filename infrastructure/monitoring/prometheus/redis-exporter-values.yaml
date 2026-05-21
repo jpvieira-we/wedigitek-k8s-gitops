@@ -1,0 +1,22 @@
+fullnameOverride: redis-exporter
+
+serviceMonitor:
+  enabled: true
+  multipleTarget: true
+  labels:
+    release: prometheus-stack
+  interval: 30s
+  telemetryPath: /scrape
+  targets:
+    - url: redis://redis-master.redis.svc.cluster.local:6379
+      name: redis-master
+    - url: redis://redis-replicas.redis.svc.cluster.local:6379
+      name: redis-replicas
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi

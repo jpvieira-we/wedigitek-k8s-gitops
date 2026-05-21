@@ -1,0 +1,312 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-loki-datasource
+  namespace: monitoring
+  labels:
+    grafana_datasource: "1"
+    release: prometheus-stack
+data:
+  loki-datasource.yaml: |-
+    apiVersion: 1
+    datasources:
+      - name: Loki
+        uid: loki
+        type: loki
+        access: proxy
+        url: http://loki.monitoring:3100
+        isDefault: false
+        jsonData:
+          derivedFields:
+            - datasourceUid: prometheus
+              matcherRegex: 'namespace="([^\"]+)".*pod="([^\"]+)"'
+              name: pod
+              url: '$${__value.raw}'
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: ingress-nginx-controller
+  namespace: monitoring
+  labels:
+    release: prometheus-stack
+spec:
+  namespaceSelector:
+    matchNames:
+      - ingress-nginx
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: controller
+      app.kubernetes.io/instance: ingress-nginx
+      app.kubernetes.io/name: ingress-nginx
+  podMetricsEndpoints:
+    - path: /metrics
+      targetPort: 10254
+      interval: 30s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: public-endpoints-root
+  namespace: monitoring
+  labels:
+    release: prometheus-stack
+spec:
+  interval: 30s
+  module: http_2xx
+  prober:
+    url: blackbox-exporter.monitoring:9115
+    path: /probe
+  targets:
+    staticConfig:
+      static:
+        - https://argocd.wedigitek.com
+        - https://data.trywefood.dev
+        - https://reports.services.trywefood.dev
+        - https://surveys.trywefood.dev
+        - https://surveys.services.trywefood.dev
+        - https://admin.trywefood.dev
+        - https://marketplace.trywefood.dev
+        - https://wecampus.trywefood.dev
+        - https://wallet.trywefood.dev
+        - https://web.trywefood.dev
+        - https://grsa.trywefood.dev
+        - https://qualitycontrol.trywefood.dev
+        - https://drive.trywefood.dev
+        - https://onboarding.trywefood.dev
+        - https://orders.trywefood.dev
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: public-api-health
+  namespace: monitoring
+  labels:
+    release: prometheus-stack
+spec:
+  interval: 30s
+  module: http_health_2xx
+  prober:
+    url: blackbox-exporter.monitoring:9115
+    path: /probe
+  targets:
+    staticConfig:
+      static:
+        - https://api.trywefood.dev/health
+        - https://api.direct.trywefood.dev/health
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: internal-api-health
+  namespace: monitoring
+  labels:
+    release: prometheus-stack
+spec:
+  interval: 30s
+  module: http_health_2xx
+  prober:
+    url: blackbox-exporter.monitoring:9115
+    path: /probe
+  targets:
+    staticConfig:
+      static:
+        - http://we-api.we-api-prd.svc.cluster.local/health
+        - http://data-api.data-api-prd.svc.cluster.local/health
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-platform-overview
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  platform-overview.json: |-
+    {
+      "annotations": {"list": []},
+      "editable": true,
+      "graphTooltip": 0,
+      "links": [],
+      "panels": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "fieldConfig": {"defaults": {"unit": "percentunit"}, "overrides": []},
+          "gridPos": {"h": 6, "w": 6, "x": 0, "y": 0},
+          "id": 1,
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showThresholdLabels": false, "showThresholdMarkers": true},
+          "targets": [{"expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"\",image!=\"\"}[5m])) / sum(machine_cpu_cores)", "refId": "A"}],
+          "title": "Cluster CPU Usage",
+          "type": "gauge"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "fieldConfig": {"defaults": {"unit": "percentunit"}, "overrides": []},
+          "gridPos": {"h": 6, "w": 6, "x": 6, "y": 0},
+          "id": 2,
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showThresholdLabels": false, "showThresholdMarkers": true},
+          "targets": [{"expr": "1 - (sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes))", "refId": "A"}],
+          "title": "Cluster Memory Usage",
+          "type": "gauge"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "fieldConfig": {"defaults": {}, "overrides": []},
+          "gridPos": {"h": 6, "w": 6, "x": 12, "y": 0},
+          "id": 3,
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}},
+          "targets": [{"expr": "sum(kube_pod_status_phase{phase=~\"Pending|Running\"})", "refId": "A"}],
+          "title": "Pods Running/Pending",
+          "type": "stat"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "fieldConfig": {"defaults": {}, "overrides": []},
+          "gridPos": {"h": 6, "w": 6, "x": 18, "y": 0},
+          "id": 4,
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}},
+          "targets": [{"expr": "sum(increase(kube_pod_container_status_restarts_total[1h]))", "refId": "A"}],
+          "title": "Container Restarts 1h",
+          "type": "stat"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "fieldConfig": {"defaults": {"unit": "reqps"}, "overrides": []},
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 6},
+          "id": 5,
+          "targets": [{"expr": "sum(rate(nginx_ingress_controller_requests[5m])) by (ingress)", "legendFormat": "{{ ingress }}", "refId": "A"}],
+          "title": "Ingress Requests/s",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "fieldConfig": {"defaults": {"unit": "s"}, "overrides": []},
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 6},
+          "id": 6,
+          "targets": [{"expr": "histogram_quantile(0.95, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket[5m])) by (le, ingress))", "legendFormat": "{{ ingress }}", "refId": "A"}],
+          "title": "Ingress P95 Latency",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "fieldConfig": {"defaults": {}, "overrides": []},
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 14},
+          "id": 7,
+          "targets": [{"expr": "probe_success", "legendFormat": "{{ instance }}", "refId": "A"}],
+          "title": "Probe Success",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "fieldConfig": {"defaults": {}, "overrides": []},
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 14},
+          "id": 8,
+          "targets": [{"expr": "probe_duration_seconds", "legendFormat": "{{ instance }}", "refId": "A"}],
+          "title": "Probe Duration",
+          "type": "timeseries"
+        }
+      ],
+      "refresh": "30s",
+      "schemaVersion": 39,
+      "style": "dark",
+      "tags": ["platform", "observability"],
+      "templating": {"list": []},
+      "time": {"from": "now-6h", "to": "now"},
+      "title": "Platform Overview",
+      "uid": "platform-overview",
+      "version": 1
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-databases-and-logs
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  databases-and-logs.json: |-
+    {
+      "annotations": {"list": []},
+      "editable": true,
+      "graphTooltip": 0,
+      "links": [],
+      "panels": [
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "fieldConfig": {"defaults": {}, "overrides": []},
+          "gridPos": {"h": 5, "w": 6, "x": 0, "y": 0},
+          "id": 1,
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}},
+          "targets": [{"expr": "mongodb_up", "legendFormat": "{{ service }}", "refId": "A"}],
+          "title": "Mongo Up",
+          "type": "stat"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "fieldConfig": {"defaults": {}, "overrides": []},
+          "gridPos": {"h": 5, "w": 6, "x": 6, "y": 0},
+          "id": 2,
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}},
+          "targets": [{"expr": "redis_up", "legendFormat": "{{ service }}", "refId": "A"}],
+          "title": "Redis Up",
+          "type": "stat"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+          "gridPos": {"h": 5, "w": 6, "x": 12, "y": 0},
+          "id": 3,
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}},
+          "targets": [{"expr": "sum(mongodb_ss_connections{conn_type=~\"current|available\"})", "refId": "A"}],
+          "title": "Mongo Connections",
+          "type": "stat"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "fieldConfig": {"defaults": {"unit": "bytes"}, "overrides": []},
+          "gridPos": {"h": 5, "w": 6, "x": 18, "y": 0},
+          "id": 4,
+          "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}},
+          "targets": [{"expr": "sum(redis_memory_used_bytes)", "refId": "A"}],
+          "title": "Redis Memory Used",
+          "type": "stat"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "fieldConfig": {"defaults": {}, "overrides": []},
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 5},
+          "id": 5,
+          "targets": [{"expr": "rate(mongodb_ss_opcounters_insert[5m]) + rate(mongodb_ss_opcounters_query[5m]) + rate(mongodb_ss_opcounters_update[5m]) + rate(mongodb_ss_opcounters_delete[5m])", "legendFormat": "mongo ops", "refId": "A"}],
+          "title": "Mongo Ops/s",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "fieldConfig": {"defaults": {}, "overrides": []},
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 5},
+          "id": 6,
+          "targets": [{"expr": "rate(redis_commands_processed_total[5m])", "legendFormat": "{{ instance }}", "refId": "A"}],
+          "title": "Redis Commands/s",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "loki", "uid": "loki"},
+          "gridPos": {"h": 10, "w": 24, "x": 0, "y": 13},
+          "id": 7,
+          "options": {"dedupStrategy": "none", "enableLogDetails": true, "prettifyLogMessage": false, "showCommonLabels": false, "showLabels": true, "showTime": true, "sortOrder": "Descending", "wrapLogMessage": true},
+          "targets": [{"expr": "{namespace=~\"we-api-prd|data-api-prd|mongodb|redis|ingress-nginx\"}", "refId": "A", "queryType": "range"}],
+          "title": "Critical Namespace Logs",
+          "type": "logs"
+        }
+      ],
+      "refresh": "30s",
+      "schemaVersion": 39,
+      "style": "dark",
+      "tags": ["databases", "logs", "observability"],
+      "templating": {"list": []},
+      "time": {"from": "now-6h", "to": "now"},
+      "title": "Databases and Logs",
+      "uid": "databases-and-logs",
+      "version": 1
+    }

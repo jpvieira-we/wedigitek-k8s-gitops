@@ -1,0 +1,21 @@
+fullnameOverride: mongodb-exporter
+existingSecret:
+  name: mongodb-exporter-uri
+  key: mongodb-uri
+
+extraArgs:
+  - --collect-all
+
+serviceMonitor:
+  enabled: true
+  additionalLabels:
+    release: prometheus-stack
+  interval: 30s
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi

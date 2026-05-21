@@ -1,0 +1,20 @@
+fullnameOverride: we-api-aks-mongo-exporter
+mongodb:
+  uri: mongodb://we-api-aks-mongo.we-api-prd.svc.cluster.local:27017/admin?directConnection=true
+
+extraArgs:
+  - --collect-all
+
+serviceMonitor:
+  enabled: true
+  additionalLabels:
+    release: prometheus-stack
+  interval: 30s
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi

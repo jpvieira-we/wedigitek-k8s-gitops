@@ -1,0 +1,17 @@
+fullnameOverride: promtail
+
+config:
+  clients:
+    - url: http://loki.monitoring:3100/loki/api/v1/push
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 256Mi
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: http-metrics
