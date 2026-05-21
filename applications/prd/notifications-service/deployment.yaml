@@ -17,6 +17,8 @@ spec:
       app: notifications-service
   template:
     metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "monitoring/nodejs-instrumentation"
       labels:
         app: notifications-service
     spec:

@@ -12,6 +12,8 @@ spec:
       app: wefood-drive
   template:
     metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "monitoring/nodejs-instrumentation"
       labels:
         app: wefood-drive
     spec:

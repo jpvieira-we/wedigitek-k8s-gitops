@@ -22,6 +22,7 @@ spec:
         prometheus.io/path: /metrics
         prometheus.io/port: "3000"
         prometheus.io/scrape: "true"
+        instrumentation.opentelemetry.io/inject-nodejs: "monitoring/nodejs-instrumentation"
       labels:
         app: we-api
         version: v3.22.4

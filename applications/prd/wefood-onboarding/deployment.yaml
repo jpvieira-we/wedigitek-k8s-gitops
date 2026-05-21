@@ -17,6 +17,8 @@ spec:
       app: wefood-onboarding
   template:
     metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "monitoring/nodejs-instrumentation"
       labels:
         app: wefood-onboarding
     spec:

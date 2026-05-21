@@ -17,6 +17,8 @@ spec:
       app: activity-logs-service
   template:
     metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "monitoring/nodejs-instrumentation"
       labels:
         app: activity-logs-service
     spec:

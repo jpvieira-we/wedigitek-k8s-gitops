@@ -12,6 +12,8 @@ spec:
       app: script-runner
   template:
     metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "monitoring/nodejs-instrumentation"
       labels:
         app: script-runner
     spec:

@@ -1,0 +1,142 @@
+---
+# OTel Collector — recebe OTLP das apps e expõe /metrics para Prometheus
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-collector
+  namespace: monitoring
+spec:
+  mode: deployment
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  config:
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+
+    processors:
+      batch:
+        timeout: 5s
+        send_batch_size: 1024
+      memory_limiter:
+        check_interval: 1s
+        limit_mib: 400
+        spike_limit_mib: 100
+      # Enriquece métricas com labels k8s vindos do deployment
+      k8sattributes:
+        auth_type: serviceAccount
+        passthrough: false
+        extract:
+          metadata:
+            - k8s.namespace.name
+            - k8s.deployment.name
+            - k8s.pod.name
+            - k8s.node.name
+        pod_association:
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.ip
+          - sources:
+              - from: connection
+
+    exporters:
+      # Expõe /metrics na porta 8889 para o Prometheus raspar
+      prometheus:
+        endpoint: "0.0.0.0:8889"
+        namespace: "otel"
+        resource_to_telemetry_conversion:
+          enabled: true
+        enable_open_metrics: true
+      # Debug opcional (remover em prod)
+      # debug:
+      #   verbosity: normal
+
+    service:
+      pipelines:
+        metrics:
+          receivers: [otlp]
+          processors: [memory_limiter, k8sattributes, batch]
+          exporters: [prometheus]
+        # traces: adicionar Jaeger/Tempo futuramente
+---
+# ServiceMonitor para Prometheus raspar o OTel Collector
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: otel-collector
+  namespace: monitoring
+  labels:
+    release: prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: otel-collector-collector
+  namespaceSelector:
+    matchNames:
+      - monitoring
+  endpoints:
+    - port: prometheus
+      path: /metrics
+      interval: 30s
+---
+# ClusterRole para o k8sattributes processor ler metadados dos pods
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: otel-collector-k8s-reader
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "nodes", "namespaces"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["replicasets", "deployments", "statefulsets", "daemonsets"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: otel-collector-k8s-reader
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: otel-collector-k8s-reader
+subjects:
+  - kind: ServiceAccount
+    name: otel-collector-collector
+    namespace: monitoring
+---
+# Instrumentation CR — injeta SDK Node.js automaticamente nos pods anotados
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: nodejs-instrumentation
+  namespace: monitoring
+spec:
+  exporter:
+    endpoint: http://otel-collector-collector.monitoring:4318
+  propagators:
+    - tracecontext
+    - baggage
+  sampler:
+    type: always_on
+  nodejs:
+    env:
+      # Ativa métricas de runtime Node.js (event loop, heap, GC, etc.)
+      - name: OTEL_METRICS_EXEMPLAR_FILTER
+        value: "ALWAYS_ON"
+      - name: OTEL_NODE_ENABLED_INSTRUMENTATIONS
+        value: "http,express,fastify,mongodb,redis,pg,grpc,dns,net,fs,bunyan,pino,winston"
+      - name: OTEL_EXPORTER_OTLP_PROTOCOL
+        value: "http/protobuf"
+      - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        value: "http://otel-collector-collector.monitoring:4318"

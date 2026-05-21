@@ -17,6 +17,8 @@ spec:
       app: we-api-integrations-service
   template:
     metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "monitoring/nodejs-instrumentation"
       labels:
         app: we-api-integrations-service
     spec:

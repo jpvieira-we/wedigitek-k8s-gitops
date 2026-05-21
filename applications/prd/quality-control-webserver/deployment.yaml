@@ -12,6 +12,8 @@ spec:
       app: quality-control-webserver
   template:
     metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "monitoring/nodejs-instrumentation"
       labels:
         app: quality-control-webserver
     spec:

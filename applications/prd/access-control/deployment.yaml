@@ -17,6 +17,8 @@ spec:
       app: access-control
   template:
     metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "monitoring/nodejs-instrumentation"
       labels:
         app: access-control
     spec:

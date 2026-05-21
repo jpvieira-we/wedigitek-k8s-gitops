@@ -12,6 +12,8 @@ spec:
       app: we-menu
   template:
     metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-nodejs: "monitoring/nodejs-instrumentation"
       labels:
         app: we-menu
     spec:
