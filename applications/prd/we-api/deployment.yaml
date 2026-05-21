@@ -74,6 +74,10 @@ spec:
         image: ghcr.io/wedigitek/we-api:rc
         imagePullPolicy: Always
         env:
+        - name: WE_API_NODE_ENV
+          value: "production"
+        - name: WE_API_DB_CONNECTION_STRING
+          value: "mongodb://we-api-aks-mongo:27017/wedigitek"
         - name: WE_API_ACTIVE_SERVICES_MONIT
           value: "$node"
         envFrom:

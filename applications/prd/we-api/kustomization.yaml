@@ -10,6 +10,9 @@ resources:
   - configmap.yaml
   - ingress.yaml
   - hpa.yaml
+  - mongodb-isolated.yaml
+  - mongodb-sync-cronjob.yaml
+  - mongodb-networkpolicy.yaml
   - secretproviderclass-env.yaml
   - secretproviderclass-files.yaml
 

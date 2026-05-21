@@ -1,0 +1,58 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: we-api-mongo-sync
+  namespace: we-api-prd
+  labels:
+    app: we-api-mongo-sync
+spec:
+  schedule: "15 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        metadata:
+          labels:
+            app: we-api-mongo-sync
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: mongo-sync
+              image: mongo:6.0
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: SOURCE_MONGO_URI
+                  valueFrom:
+                    secretKeyRef:
+                      name: we-api-mongo-sync-source
+                      key: SOURCE_MONGO_URI
+                - name: TARGET_MONGO_URI
+                  value: "mongodb://we-api-aks-mongo:27017/wedigitek"
+              command:
+                - /bin/sh
+                - -lc
+                - |
+                  set -eu
+                  mongodump \
+                    --uri="$SOURCE_MONGO_URI" \
+                    --db="wedigitek" \
+                    --readPreference=secondaryPreferred \
+                    --archive \
+                    --gzip \
+                    --numParallelCollections=1 \
+                  | mongorestore \
+                    --uri="$TARGET_MONGO_URI" \
+                    --archive \
+                    --gzip \
+                    --drop \
+                    --numInsertionWorkersPerCollection=2
+              resources:
+                requests:
+                  cpu: "200m"
+                  memory: "512Mi"
+                limits:
+                  cpu: "1"
+                  memory: "2Gi"
