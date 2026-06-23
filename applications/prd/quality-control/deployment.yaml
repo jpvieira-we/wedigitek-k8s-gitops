@@ -33,7 +33,7 @@ spec:
             secretProviderClass: quality-control-keyvault-env
       containers:
       - name: quality-control
-        image: ghcr.io/wedigitek/we-services-quality-control:rc
+        image: ghcr.io/wedigitek/we-services-quality-control:main
         imagePullPolicy: Always
         envFrom:
         - secretRef:

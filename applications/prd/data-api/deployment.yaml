@@ -33,7 +33,7 @@ spec:
             secretProviderClass: data-api-keyvault-env
       containers:
       - name: data-api
-        image: ghcr.io/wedigitek/data-api:rc
+        image: ghcr.io/wedigitek/data-api:main
         imagePullPolicy: IfNotPresent
         envFrom:
         - secretRef:

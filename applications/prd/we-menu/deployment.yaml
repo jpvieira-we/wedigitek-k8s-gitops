@@ -21,7 +21,7 @@ spec:
       - name: ghcr-pull-secret
       containers:
       - name: we-menu
-        image: ghcr.io/wedigitek/we-menu:rc
+        image: ghcr.io/wedigitek/we-menu:main
         ports:
         - containerPort: 80
         resources:

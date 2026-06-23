@@ -72,7 +72,7 @@ spec:
           secretName: we-api-apikeys
       containers:
       - name: we-api
-        image: ghcr.io/wedigitek/we-api:rc
+        image: ghcr.io/wedigitek/we-api:main
         imagePullPolicy: Always
         env:
         - name: WE_API_NODE_ENV

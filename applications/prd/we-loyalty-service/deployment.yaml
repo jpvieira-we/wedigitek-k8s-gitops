@@ -33,7 +33,7 @@ spec:
             secretProviderClass: we-loyalty-service-keyvault-env
       containers:
       - name: we-loyalty-service
-        image: ghcr.io/wedigitek/we-services-loyalty:rc
+        image: ghcr.io/wedigitek/we-services-loyalty:main
         imagePullPolicy: Always
         envFrom:
         - secretRef:

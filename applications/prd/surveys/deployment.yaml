@@ -33,7 +33,7 @@ spec:
             secretProviderClass: surveys-keyvault-env
       containers:
       - name: surveys
-        image: ghcr.io/wedigitek/we-services-surveys:rc
+        image: ghcr.io/wedigitek/we-services-surveys:main
         imagePullPolicy: Always
         envFrom:
         - secretRef:

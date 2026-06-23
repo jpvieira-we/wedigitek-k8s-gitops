@@ -179,6 +179,11 @@ git push --tags
 #   4. ArgoCD detecta e faz deploy automático
 ```
 
+### Observação operacional (PRD)
+- Alterações de tag de imagem em produção devem ser feitas no repositório GitOps (ex.: `:rc` -> `:main` em `applications/prd/**/deployment.yaml`).
+- Alterações diretas no cluster podem ser revertidas por reconciliação do ArgoCD.
+- Sincronização contínua Mongo (produção -> AKS) é mantida por CronJob versionado no GitOps (`applications/prd/we-api/mongodb-sync-cronjob.yaml`) com frequência de 5 minutos.
+
 ---
 
 ## 🔐 Segurança

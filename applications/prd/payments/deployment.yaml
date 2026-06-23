@@ -33,7 +33,7 @@ spec:
             secretProviderClass: payments-keyvault-env
       containers:
       - name: payments
-        image: ghcr.io/wedigitek/we-services-payments:rc
+        image: ghcr.io/wedigitek/we-services-payments:main
         imagePullPolicy: Always
         envFrom:
         - secretRef:

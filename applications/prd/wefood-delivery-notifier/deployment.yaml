@@ -26,7 +26,7 @@ spec:
       - name: ghcr-pull-secret
       containers:
       - name: wefood-delivery-notifier
-        image: ghcr.io/wedigitek/wefood-delivery-notifier:rc
+        image: ghcr.io/wedigitek/wefood-delivery-notifier:main
         imagePullPolicy: Always
         envFrom:
         - secretRef:

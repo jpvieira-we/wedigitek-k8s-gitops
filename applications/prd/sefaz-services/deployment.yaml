@@ -21,7 +21,7 @@ spec:
       - name: ghcr-pull-secret
       containers:
       - name: sefaz-services
-        image: ghcr.io/wedigitek/sefaz-services:rc
+        image: ghcr.io/wedigitek/sefaz-services:main
         imagePullPolicy: Always
         envFrom:
         - secretRef:

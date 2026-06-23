@@ -21,7 +21,7 @@ spec:
       - name: ghcr-pull-secret
       containers:
       - name: surveys-reports
-        image: ghcr.io/wedigitek/reports-surveys:rc
+        image: ghcr.io/wedigitek/reports-surveys:main
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8050

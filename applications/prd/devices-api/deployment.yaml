@@ -33,7 +33,7 @@ spec:
             secretProviderClass: devices-api-keyvault-env
       containers:
       - name: devices-api
-        image: ghcr.io/wedigitek/api-devices:rc
+        image: ghcr.io/wedigitek/api-devices:main
         imagePullPolicy: Always
         envFrom:
         - secretRef:

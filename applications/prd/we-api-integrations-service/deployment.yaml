@@ -33,7 +33,7 @@ spec:
             secretProviderClass: we-api-integrations-service-keyvault-env
       containers:
       - name: we-api-integrations-service
-        image: ghcr.io/wedigitek/we-services-integrations:rc
+        image: ghcr.io/wedigitek/we-services-integrations:main
         imagePullPolicy: Always
         envFrom:
         - secretRef:

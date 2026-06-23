@@ -26,7 +26,7 @@ spec:
       - name: ghcr-pull-secret
       containers:
       - name: we-docs
-        image: ghcr.io/wedigitek/we-docs:rc
+        image: ghcr.io/wedigitek/we-docs:main
         imagePullPolicy: Always
         ports:
         - name: http
