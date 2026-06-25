@@ -21,7 +21,7 @@ spec:
       - name: ghcr-pull-secret
       containers:
       - name: script-runner
-        image: ghcr.io/wedigitek/script-runner:main
+        image: ghcr.io/wedigitek/script-runner:rc
         envFrom:
         - secretRef:
             name: script-runner-secrets
