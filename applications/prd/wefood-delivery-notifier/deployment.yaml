@@ -32,6 +32,10 @@ spec:
         - secretRef:
             name: wefood-delivery-notifier-secrets-kv
         env:
+        - name: WE_API_DB_CONNECTION_STRING
+          value: "mongodb://we-api-aks-mongo:27017/wedigitek"
+        - name: WE_API_DB_NAME
+          value: "wedigitek"
         - name: NODE_PATH
           value: "/wefood-delivery-notifier"
         ports:
