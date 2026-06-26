@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-devices-mongo
+  namespace: service-devices
+  labels:
+    app: service-devices-mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-devices-mongo
+  template:
+    metadata:
+      labels:
+        app: service-devices-mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:6
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 27017
+          protocol: TCP

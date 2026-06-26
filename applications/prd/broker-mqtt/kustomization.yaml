@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: broker-mqtt
+
+resources:
+  - namespace.yaml
+  - serviceaccount.yaml
+  - secretproviderclass-files.yaml
+  - deployment.yaml
+  - service.yaml
+  - service-public.yaml
+  - ingress.yaml
+
+labels:
+  - pairs:
+      environment: production
+      managed-by: argocd

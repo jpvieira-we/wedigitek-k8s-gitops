@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: broker-mqtt
+  namespace: broker-mqtt
+  labels:
+    app: broker-mqtt
+spec:
+  type: ClusterIP
+  ports:
+  - name: mqtts-device
+    port: 8883
+    targetPort: 8883
+    protocol: TCP
+  - name: mqtts-backend
+    port: 8884
+    targetPort: 8884
+    protocol: TCP
+  - name: ws
+    port: 9001
+    targetPort: 9001
+    protocol: TCP
+  selector:
+    app: broker-mqtt

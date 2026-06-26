@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-devices-mongo
+  namespace: service-devices
+  labels:
+    app: service-devices-mongo
+spec:
+  type: ClusterIP
+  ports:
+  - name: mongo
+    port: 27017
+    targetPort: 27017
+    protocol: TCP
+  selector:
+    app: service-devices-mongo

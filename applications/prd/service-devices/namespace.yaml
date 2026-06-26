@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: service-devices
+  labels:
+    app: service-devices
+    environment: production

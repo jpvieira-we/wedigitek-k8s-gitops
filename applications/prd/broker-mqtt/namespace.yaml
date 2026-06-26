@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: broker-mqtt
+  labels:
+    app: broker-mqtt
+    environment: production

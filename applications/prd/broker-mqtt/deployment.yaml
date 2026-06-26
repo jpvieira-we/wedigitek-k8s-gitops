@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: broker-mqtt
+  namespace: broker-mqtt
+  labels:
+    app: broker-mqtt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: broker-mqtt
+  template:
+    metadata:
+      labels:
+        app: broker-mqtt
+    spec:
+      serviceAccountName: broker-mqtt
+      containers:
+      - name: vernemq
+        image: vernemq/vernemq:latest
+        imagePullPolicy: Always
+        env:
+        - name: DOCKER_VERNEMQ_ACCEPT_EULA
+          value: "yes"
+        - name: DOCKER_VERNEMQ_ALLOW_ANONYMOUS
+          value: "off"
+        - name: DOCKER_VERNEMQ_PLUGINS__VMQ_PASSWD
+          value: "on"
+        - name: DOCKER_VERNEMQ_VMQ_PASSWD__PASSWORD_FILE
+          value: /etc/vernemq/vmq.passwd
+        - name: DOCKER_VERNEMQ_PLUGINS__VMQ_WEBHOOKS
+          value: "on"
+        - name: DOCKER_VERNEMQ_VMQ_WEBHOOKS__MYBROKER__HOOK
+          value: auth_on_register
+        - name: DOCKER_VERNEMQ_VMQ_WEBHOOKS__MYBROKER__ENDPOINT
+          value: http://service-devices:3000/mqtt/auth
+        - name: DOCKER_VERNEMQ_VMQ_WEBHOOKS__MYSUB__HOOK
+          value: auth_on_subscribe
+        - name: DOCKER_VERNEMQ_VMQ_WEBHOOKS__MYSUB__ENDPOINT
+          value: http://service-devices:3000/mqtt/acl
+        - name: DOCKER_VERNEMQ_VMQ_WEBHOOKS__MYPUB__HOOK
+          value: auth_on_publish
+        - name: DOCKER_VERNEMQ_VMQ_WEBHOOKS__MYPUB__ENDPOINT
+          value: http://service-devices:3000/mqtt/pub
+        - name: DOCKER_VERNEMQ_VMQ_WEBHOOKS__MYGONE__HOOK
+          value: on_client_gone
+        - name: DOCKER_VERNEMQ_VMQ_WEBHOOKS__MYGONE__ENDPOINT
+          value: http://service-devices:3000/mqtt/event
+        - name: DOCKER_VERNEMQ_VMQ_WEBHOOKS__MYOFFLINE__HOOK
+          value: on_client_offline
+        - name: DOCKER_VERNEMQ_VMQ_WEBHOOKS__MYOFFLINE__ENDPOINT
+          value: http://service-devices:3000/mqtt/event
+        - name: DOCKER_VERNEMQ_LISTENER__SSL__DEFAULT
+          value: 0.0.0.0:8883
+        - name: DOCKER_VERNEMQ_LISTENER__SSL__DEFAULT__CAFILE
+          value: /etc/vernemq/certs/ca.crt
+        - name: DOCKER_VERNEMQ_LISTENER__SSL__DEFAULT__CERTFILE
+          value: /etc/vernemq/certs/broker.crt
+        - name: DOCKER_VERNEMQ_LISTENER__SSL__DEFAULT__KEYFILE
+          value: /etc/vernemq/certs/broker.key
+        - name: DOCKER_VERNEMQ_LISTENER__SSL__DEFAULT__REQUIRE_CERTIFICATE
+          value: "on"
+        - name: DOCKER_VERNEMQ_LISTENER__SSL__DEFAULT__USE_IDENTITY_AS_USERNAME
+          value: "on"
+        - name: DOCKER_VERNEMQ_LISTENER__SSL__BACKEND
+          value: 0.0.0.0:8884
+        - name: DOCKER_VERNEMQ_LISTENER__SSL__BACKEND__CAFILE
+          value: /etc/vernemq/certs/ca.crt
+        - name: DOCKER_VERNEMQ_LISTENER__SSL__BACKEND__CERTFILE
+          value: /etc/vernemq/certs/broker.crt
+        - name: DOCKER_VERNEMQ_LISTENER__SSL__BACKEND__KEYFILE
+          value: /etc/vernemq/certs/broker.key
+        - name: DOCKER_VERNEMQ_LISTENER__SSL__BACKEND__REQUIRE_CERTIFICATE
+          value: "off"
+        - name: DOCKER_VERNEMQ_LISTENER__SSL__BACKEND__USE_IDENTITY_AS_USERNAME
+          value: "off"
+        - name: DOCKER_VERNEMQ_LISTENER__WS__DEFAULT
+          value: 0.0.0.0:9001
+        ports:
+        - name: mqtts-device
+          containerPort: 8883
+          protocol: TCP
+        - name: mqtts-backend
+          containerPort: 8884
+          protocol: TCP
+        - name: ws
+          containerPort: 9001
+          protocol: TCP
+        volumeMounts:
+        - name: keyvault-files
+          mountPath: /etc/vernemq/certs
+          readOnly: true
+        - name: keyvault-files
+          mountPath: /etc/vernemq/vmq.passwd
+          readOnly: true
+          subPath: vmq.passwd
+        - name: keyvault-files
+          mountPath: /etc/vernemq/vmq.acl
+          readOnly: true
+          subPath: vmq.acl
+      volumes:
+      - name: keyvault-files
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: broker-mqtt-keyvault-files

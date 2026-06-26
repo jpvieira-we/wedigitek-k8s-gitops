@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: broker-mqtt-ws
+  namespace: broker-mqtt
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/websocket-services: broker-mqtt
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: mqtt.trywefood.dev
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: broker-mqtt
+            port:
+              number: 9001
+  tls:
+  - hosts:
+    - mqtt.trywefood.dev
+    secretName: mqtt-trywefood-dev-tls
