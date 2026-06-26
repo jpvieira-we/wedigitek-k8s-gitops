@@ -17,6 +17,12 @@ spec:
         - podSelector:
             matchLabels:
               app: we-api-mongo-sync
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: wefood-delivery-notifier-prd
+          podSelector:
+            matchLabels:
+              app: wefood-delivery-notifier
       ports:
         - protocol: TCP
           port: 27017
