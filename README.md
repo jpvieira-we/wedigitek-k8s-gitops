@@ -1,5 +1,12 @@
 # wedigitek-k8s-gitops
 
+## Documentação principal
+
+- Operação GitOps em produção: [GITOPS-OPERACAO-PRD.md](GITOPS-OPERACAO-PRD.md)
+- Arquitetura geral: [docs/architecture.md](docs/architecture.md)
+- Azure Key Vault: [KEYVAULT_SETUP_GUIDE.md](KEYVAULT_SETUP_GUIDE.md)
+- ArgoCD: [infrastructure/argocd/README.md](infrastructure/argocd/README.md)
+
 ## Operações recentes (AKS)
 
 ### 1) Namespace MQTT
