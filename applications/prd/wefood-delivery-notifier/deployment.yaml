@@ -17,8 +17,6 @@ spec:
       app: wefood-delivery-notifier
   template:
     metadata:
-      annotations:
-        instrumentation.opentelemetry.io/inject-nodejs: "monitoring/nodejs-instrumentation"
       labels:
         app: wefood-delivery-notifier
     spec:
