@@ -46,7 +46,7 @@ spec:
         - name: WE_DEVICES_IOT_MQTT_PORT
           value: "8883"
         - name: WE_DEVICES_WE_API_URL
-          value: http://10.1.0.4:3000
+          value: https://api.trywefood.dev
         - name: WE_DEVICES_NATS_PING_INTERVAL
           value: "30000"
         ports:
