@@ -31,7 +31,7 @@ spec:
             name: wefood-delivery-notifier-secrets-kv
         env:
         - name: WE_API_DB_CONNECTION_STRING
-          value: "mongodb://mongodb.mongodb.svc.cluster.local:27017/wedigitek"
+          value: "mongodb://mongodb.mongodb.svc.cluster.local:27017/wedigitek?directConnection=true"
         - name: WE_API_DB_NAME
           value: "wedigitek"
         - name: NODE_PATH
