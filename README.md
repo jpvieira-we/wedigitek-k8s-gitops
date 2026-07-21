@@ -2,6 +2,7 @@
 
 ## Documentação principal
 
+- Sustentação de produção: [docs/RUNBOOK-SUSTENTACAO-PRD.md](docs/RUNBOOK-SUSTENTACAO-PRD.md)
 - Operação GitOps em produção: [GITOPS-OPERACAO-PRD.md](GITOPS-OPERACAO-PRD.md)
 - Arquitetura geral: [docs/architecture.md](docs/architecture.md)
 - Azure Key Vault: [KEYVAULT_SETUP_GUIDE.md](KEYVAULT_SETUP_GUIDE.md)
