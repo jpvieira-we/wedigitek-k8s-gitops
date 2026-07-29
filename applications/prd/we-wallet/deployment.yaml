@@ -33,7 +33,7 @@ spec:
             secretProviderClass: we-wallet-keyvault-env
       containers:
       - name: we-wallet
-        image: ghcr.io/wedigitek/we-wallet:main
+        image: ghcr.io/wedigitek/we-wallet:rc
         imagePullPolicy: Always
         volumeMounts:
         - name: keyvault-env
