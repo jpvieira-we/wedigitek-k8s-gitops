@@ -33,7 +33,7 @@ spec:
             secretProviderClass: we-admin-keyvault-env
       containers:
       - name: we-admin
-        image: ghcr.io/wedigitek/we-admin:main
+        image: ghcr.io/wedigitek/we-admin:rc
         imagePullPolicy: Always
         volumeMounts:
         - name: keyvault-env
